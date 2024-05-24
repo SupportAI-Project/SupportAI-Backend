@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { DataSource as Connection } from 'typeorm';
-import { testDatabaseConnection } from '../libs/common/src';
+import { testDatabaseConnection } from '@app/common';
 import { Logger, ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const logger = new Logger('bootstrap');

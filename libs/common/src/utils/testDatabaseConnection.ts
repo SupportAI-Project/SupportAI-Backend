@@ -6,8 +6,6 @@ export async function testDatabaseConnection(
   try {
     if (connection.isInitialized) {
       return 'Database connection successful';
-    } else {
-      return 'Database connection failed: Connection is not active';
     }
   } catch (error) {
     return `Database connection failed: ${error.message}`;
