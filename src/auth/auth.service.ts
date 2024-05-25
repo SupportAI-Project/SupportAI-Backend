@@ -18,12 +18,21 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const dbUser = await this.userService.getUserByUsername(loginDto.username);
-    if (dbUser?.password !== loginDto.password) {
+    if (!dbUser) {
       throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
-    const payload = { sub: dbUser.ID, username: dbUser.username };
+    const isPasswordMatching = await this.userService.comparePassword(
+      loginDto.password,
+      dbUser.password,
+    );
+    if (!isPasswordMatching) {
+      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
+    }
+    const payload = { sub: dbUser.id, username: dbUser.username };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
   }
+
+  async register() {}
 }

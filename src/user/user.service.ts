@@ -5,6 +5,7 @@ import { User } from './model/user.model';
 import { randomUUID } from 'crypto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -19,7 +20,18 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
+  async comparePassword(
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return bcrypt.compare(password, hashedPassword);
+  }
   async createUser(createUserDto: CreateUserDto): Promise<User> {
+    const hashedPassword = await bcrypt.hash(
+      createUserDto.password,
+      process.env.SALT_ROUNDS,
+    );
+    createUserDto.password = hashedPassword;
     const newUser = this.userRepository.create(createUserDto);
     return this.userRepository.save(newUser);
   }
@@ -41,7 +53,6 @@ export class UserService {
   }
 
   async getUserByUsername(username: string) {
-    // This is a mock function, replace it with your own implementation
-    return this.testUser;
+    return this.userRepository.findOne({ where: { username } });
   }
 }
