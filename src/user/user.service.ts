@@ -32,6 +32,7 @@ export class UserService {
   }
 
   async getUserByUsername(username: string) {
+    // This is a mock function, replace it with your own implementation
     return this.testUser;
   }
 }

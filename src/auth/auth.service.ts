@@ -16,9 +16,9 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(username: string, password: string) {
-    const dbUser = await this.userService.getUserByUsername(username);
-    if (dbUser?.password !== password) {
+  async login(loginDto: LoginDto) {
+    const dbUser = await this.userService.getUserByUsername(loginDto.username);
+    if (dbUser?.password !== loginDto.password) {
       throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
     const payload = { sub: dbUser.ID, username: dbUser.username };
