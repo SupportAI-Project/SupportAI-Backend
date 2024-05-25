@@ -9,12 +9,6 @@ import bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
-  private testUser = {
-    ID: randomUUID(),
-    username: 'test',
-    password: 'test',
-  };
-
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
