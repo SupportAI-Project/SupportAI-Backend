@@ -1,9 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UUID } from 'typeorm/driver/mongodb/bson.typings';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class UserService {
+  private testUser = {
+    ID: randomUUID(),
+    username: 'test',
+    password: 'test',
+  };
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }
@@ -22,5 +29,9 @@ export class UserService {
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  async getUserByUsername(username: string) {
+    return this.testUser;
   }
 }
