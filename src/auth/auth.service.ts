@@ -5,10 +5,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
-import { UserService } from 'src/user/user.service';
+import { UserService } from './user/user.service';
 import { ERROR_MESSAGES } from 'src/constants/constants';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { CreateUserDto } from './user/dto/create-user.dto';
+import { User } from './user/model/user.model';
 
 @Injectable()
 export class AuthService {
@@ -35,16 +36,21 @@ export class AuthService {
     };
   }
 
-  async register(createUserDto: CreateUserDto) {
-    const dbUser = await this.userService.getUserByUsername(
-      createUserDto.username,
-    );
-    if (dbUser) {
-      throw new HttpException(
-        ERROR_MESSAGES.USERNAME_TAKEN,
-        HttpStatus.BAD_REQUEST,
+  async register(createUserDto: CreateUserDto): Promise<User> {
+    console.log('createUserDto ', createUserDto);
+    try {
+      const dbUser = await this.userService.getUserByUsername(
+        createUserDto.username,
       );
+      if (dbUser) {
+        throw new HttpException(
+          ERROR_MESSAGES.USERNAME_TAKEN,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      return await this.userService.createUser(createUserDto);
+    } catch (e) {
+      console.log('error ', e);
     }
-    return await this.userService.createUser(createUserDto);
   }
 }
