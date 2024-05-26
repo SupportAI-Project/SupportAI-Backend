@@ -37,20 +37,20 @@ export class AuthService {
   }
 
   async register(createUserDto: CreateUserDto): Promise<User> {
-    console.log('createUserDto ', createUserDto);
     try {
-      const dbUser = await this.userService.getUserByUsername(
-        createUserDto.username,
-      );
-      if (dbUser) {
+      console.log('createUserDto ', createUserDto);
+      const newUser = await this.userService.createUser(createUserDto);
+      if (!newUser) {
+        console.log('error creating user');
         throw new HttpException(
-          ERROR_MESSAGES.USERNAME_TAKEN,
-          HttpStatus.BAD_REQUEST,
+          ERROR_MESSAGES.CREATE_USER,
+          HttpStatus.INTERNAL_SERVER_ERROR,
         );
       }
-      return await this.userService.createUser(createUserDto);
-    } catch (e) {
-      console.log('error ', e);
+      return newUser;
+    } catch (error) {
+      console.log('error', error);
+      throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
     }
   }
 }
