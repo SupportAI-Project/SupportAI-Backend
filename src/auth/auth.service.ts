@@ -31,6 +31,7 @@ export class AuthService {
       throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
     const payload = { sub: dbUser.id, username: dbUser.username };
+    const token = await this.jwtService.signAsync(payload);
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
