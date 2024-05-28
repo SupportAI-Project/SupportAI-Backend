@@ -4,11 +4,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './model/user.model';
+import { User } from './entity/user.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { ERROR_MESSAGES, SALT_ROUNDS } from 'src/constants/constants';
+import { ERROR_MESSAGES, SALT_ROUNDS } from '@app/common/constants/constants';
 
 @Injectable()
 export class UserService {
@@ -46,12 +46,15 @@ export class UserService {
     }
   }
   async verifyUser(email: string, password: string) {
-    const user = await this.getUser(email);
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
+    try {
+      const user = await this.getUser(email);
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
+      }
+      return user;
+    } catch (error) {
+      console.log('error verifying user: ', error);
     }
-
-    return user;
   }
 }

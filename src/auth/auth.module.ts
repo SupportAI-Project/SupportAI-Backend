@@ -4,7 +4,8 @@ import { AuthController } from './auth.controller';
 import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { LocalStrategy } from './strategies/local.strategy';
-import { JWT_EXPIRATION_TIME } from 'src/constants/constants';
+import { JWT_EXPIRATION_TIME } from '@app/common/constants/constants';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { JWT_EXPIRATION_TIME } from 'src/constants/constants';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}

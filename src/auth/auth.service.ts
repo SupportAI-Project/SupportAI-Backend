@@ -6,13 +6,17 @@ import {
 } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { UserService } from './user/user.service';
-import { ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/constants/constants';
+import {
+  ERROR_MESSAGES,
+  SUCCESS_MESSAGES,
+} from '@app/common/constants/constants';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './user/dto/create-user.dto';
-import { User } from './user/model/user.model';
+import { User } from './user/entity/user.model';
 import { Response } from 'express';
-import { TWO_HOURS_FROM_NOW_DATE } from 'src/constants/constants';
+import { TWO_HOURS_FROM_NOW_DATE } from '@app/common/constants/constants';
 import * as bcrypt from 'bcryptjs';
+import { TokenPayload } from 'src/interfaces/TokenPayload';
 @Injectable()
 export class AuthService {
   constructor(
@@ -34,8 +38,11 @@ export class AuthService {
       console.log('password not matching');
       throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
-    const payload = { sub: dbUser.id, username: dbUser.username };
-    const jwtToken = this.jwtService.sign(payload);
+    const tokenPayload: TokenPayload = {
+      id: dbUser.id,
+      username: dbUser.username,
+    };
+    const jwtToken = this.jwtService.sign(tokenPayload);
     response.cookie('Authentication', jwtToken, {
       httpOnly: true,
       expires: TWO_HOURS_FROM_NOW_DATE,

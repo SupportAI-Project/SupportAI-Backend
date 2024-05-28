@@ -10,10 +10,11 @@ import {
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from './user/dto/create-user.dto';
-import { User } from './user/model/user.model';
+import { User } from './user/entity/user.model';
 import { Response } from 'express';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { SUCCESS_MESSAGES } from 'src/constants/constants';
+import { SUCCESS_MESSAGES } from '@app/common/constants/constants';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
