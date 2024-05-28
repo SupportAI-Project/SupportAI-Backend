@@ -5,29 +5,29 @@ import {
   HttpStatus,
   Post,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from './user/dto/create-user.dto';
 import { User } from './user/model/user.model';
 import { Response } from 'express';
-import { TWO_HOURS_FROM_NOW_DATE } from 'src/constants/constants';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { SUCCESS_MESSAGES } from 'src/constants/constants';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  login(
+  async login(
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const jwtToken = this.authService.login(loginDto);
-    response.cookie('jwt', jwtToken, {
-      httpOnly: true,
-      expires: TWO_HOURS_FROM_NOW_DATE,
-    });
+    const jwtToken = await this.authService.login(loginDto, response);
+    return { message: SUCCESS_MESSAGES.USER_LOGGED_IN, token: jwtToken };
   }
 
   @HttpCode(HttpStatus.CREATED)

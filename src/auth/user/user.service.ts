@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './model/user.model';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,13 +16,6 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
-
-  async comparePassword(
-    password: string,
-    hashedPassword: string,
-  ): Promise<boolean> {
-    return bcrypt.compare(password, hashedPassword);
-  }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     try {
@@ -38,12 +35,23 @@ export class UserService {
     }
   }
 
-  async getUserByUsername(username: string) {
+  async getUser(userIdentifier: string): Promise<User> {
     try {
-      const user = await this.userRepository.findOne({ where: { username } });
+      const user: User = await this.userRepository.findOne({
+        where: [{ username: userIdentifier }, { email: userIdentifier }],
+      });
       return user;
     } catch (error) {
-      console.log('error getting user by username: ', error);
+      console.log('error getting user by username or email: ', error);
     }
+  }
+  async verifyUser(email: string, password: string) {
+    const user = await this.getUser(email);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
+    }
+
+    return user;
   }
 }
