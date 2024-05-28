@@ -14,7 +14,6 @@ import { User } from './user/entity/user.model';
 import { Response } from 'express';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { SUCCESS_MESSAGES } from '@app/common/constants/constants';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {

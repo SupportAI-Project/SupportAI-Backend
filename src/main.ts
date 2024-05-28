@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { config } from '@app/common';
+
 import * as passport from 'passport';
 import session = require('express-session');
 
@@ -8,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: '*',
+    origin: config.FRONTEND_URL,
   });
 
   app.useGlobalPipes(
