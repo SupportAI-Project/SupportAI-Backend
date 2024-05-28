@@ -31,15 +31,22 @@ export class AuthService {
       throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
     const payload = { sub: dbUser.id, username: dbUser.username };
-    const token = await this.jwtService.signAsync(payload);
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    const jwtToken = this.jwtService.sign(payload);
+    return jwtToken;
   }
 
   async register(createUserDto: CreateUserDto): Promise<User> {
     try {
       console.log('createUserDto ', createUserDto);
+      const isUserExist =
+        (await this.userService.getUserByUsername(createUserDto.username)) !==
+        null;
+      if (isUserExist) {
+        throw new HttpException(
+          ERROR_MESSAGES.USER_ALREADY_EXISTS,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       const newUser = await this.userService.createUser(createUserDto);
       if (!newUser) {
         console.log('error creating user');
@@ -50,8 +57,8 @@ export class AuthService {
       }
       return newUser;
     } catch (error) {
-      console.log('error', error);
-      throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
+      console.log('error', error.message);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 }
