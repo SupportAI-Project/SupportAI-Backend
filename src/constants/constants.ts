@@ -5,6 +5,10 @@ export const ERROR_MESSAGES = {
   USERNAME_TAKEN: 'Username already taken',
   CREATE_USER: 'Error creating user',
 };
+export const SUCCESS_MESSAGES = {
+  USER_CREATED: 'User created successfully',
+  USER_LOGGED_OUT: 'User logged out successfully',
+};
 
 export const SALT_ROUNDS = 13;
 

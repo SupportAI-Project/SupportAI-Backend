@@ -6,10 +6,11 @@ import {
 } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { UserService } from './user/user.service';
-import { ERROR_MESSAGES } from 'src/constants/constants';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/constants/constants';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './user/dto/create-user.dto';
 import { User } from './user/model/user.model';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -60,5 +61,10 @@ export class AuthService {
       console.log('error', error.message);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async logout(response: Response) {
+    response.clearCookie('jwt');
+    response.status(HttpStatus.OK).send(SUCCESS_MESSAGES.USER_LOGGED_OUT);
   }
 }
