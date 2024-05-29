@@ -1,6 +1,7 @@
 import {
   Injectable,
   InternalServerErrorException,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -24,13 +25,13 @@ export class UserService {
       createUserDto.password = hashedPassword;
       const newUser = this.userRepository.create(createUserDto);
       if (!newUser) {
-        console.log('error creating user');
+        Logger.error('Error creating user');
         throw new InternalServerErrorException(ERROR_MESSAGES.CREATE_USER);
       }
       await this.userRepository.save(newUser);
       return newUser;
     } catch (error) {
-      console.log('error creating user: ', error);
+      Logger.error('Error creating user', error);
       throw new InternalServerErrorException(ERROR_MESSAGES.CREATE_USER);
     }
   }
@@ -42,7 +43,7 @@ export class UserService {
       });
       return user;
     } catch (error) {
-      console.log('error getting user by username or email: ', error);
+      Logger.error('Error getting user', error);
     }
   }
   async verifyUser(email: string, password: string) {
@@ -54,7 +55,7 @@ export class UserService {
       }
       return user;
     } catch (error) {
-      console.log('error verifying user: ', error);
+      Logger.error('Error verifying user', error);
     }
   }
 }

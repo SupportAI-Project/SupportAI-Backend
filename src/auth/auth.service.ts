@@ -2,6 +2,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
@@ -17,17 +18,19 @@ import { Response } from 'express';
 import { TWO_HOURS_FROM_NOW_DATE } from '@app/common/constants/constants';
 import * as bcrypt from 'bcryptjs';
 import { TokenPayload } from 'src/interfaces/TokenPayload';
+import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async login(loginDto: LoginDto, response: Response) {
     const dbUser = await this.userService.getUser(loginDto.username);
     if (!dbUser) {
-      console.log('user not found in get user');
+      Logger.error('User not found');
       throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
     const isPasswordMatching = await bcrypt.compare(
@@ -35,14 +38,19 @@ export class AuthService {
       dbUser.password,
     );
     if (!isPasswordMatching) {
-      console.log('password not matching');
+      Logger.error('password not matching');
       throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
     const tokenPayload: TokenPayload = {
-      id: dbUser.id,
+      sub: dbUser.id,
       username: dbUser.username,
     };
     const jwtToken = this.jwtService.sign(tokenPayload);
+
+    const expires = new Date();
+    expires.setSeconds(
+      expires.getSeconds() + this.configService.get('JWT_EXPIRATION'),
+    );
     response.cookie('Authentication', jwtToken, {
       httpOnly: true,
       expires: TWO_HOURS_FROM_NOW_DATE,
@@ -52,7 +60,6 @@ export class AuthService {
 
   async register(createUserDto: CreateUserDto): Promise<User> {
     try {
-      console.log('createUserDto ', createUserDto);
       const isUserExist =
         (await this.userService.getUser(createUserDto.username)) !== null;
       if (isUserExist) {
@@ -63,7 +70,7 @@ export class AuthService {
       }
       const newUser = await this.userService.createUser(createUserDto);
       if (!newUser) {
-        console.log('error creating user');
+        Logger.error('Error creating user');
         throw new HttpException(
           ERROR_MESSAGES.CREATE_USER,
           HttpStatus.INTERNAL_SERVER_ERROR,
@@ -71,7 +78,7 @@ export class AuthService {
       }
       return newUser;
     } catch (error) {
-      console.log('error', error.message);
+      Logger.error('Error creating user: ', error);
       if (
         error.message.includes('duplicate key value violates unique constraint')
       ) {
@@ -95,6 +102,7 @@ export class AuthService {
 
   async logout(response: Response) {
     try {
+      Logger.log('Logging out');
       response.clearCookie('Authentication');
       response.status(HttpStatus.OK).send(SUCCESS_MESSAGES.USER_LOGGED_OUT);
     } catch (error) {

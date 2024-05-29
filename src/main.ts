@@ -1,16 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { config } from '@app/common';
 
 import * as passport from 'passport';
 import session = require('express-session');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
   app.enableCors({
-    origin: config.FRONTEND_URL,
+    origin: '*',
   });
 
   app.useGlobalPipes(
@@ -22,7 +20,7 @@ async function bootstrap() {
 
   app.use(
     session({
-      secret: process.env.SESSION_SECRET,
+      secret: process.env.JWT_SECRET,
       resave: false,
       saveUninitialized: false,
     }),
