@@ -22,10 +22,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         request?.headers.authorization ||
         request?.authentication;
       token = token.replace('Bearer ', '');
-      if (token) {
-        Logger.log(token);
-      } else {
-        Logger.error('token is empty');
+      if (!token) {
+        Logger.error('No token found');
+        return null;
       }
       return token;
     };
