@@ -13,7 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './user/dto/create-user.dto';
 import { User } from './user/entity/user.model';
 import { Response } from 'express';
-import { TWO_HOURS_FROM_NOW_DATE } from '@app/common/constants/constants';
+import { TWO_HOURS_FROM_NOW_DATE } from '@app/common/constants/auth/auth.constants';
 import * as bcrypt from 'bcryptjs';
 import { TokenPayload } from 'src/interfaces/TokenPayload';
 import { ConfigService } from '@nestjs/config';
