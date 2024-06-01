@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
 import { IsNotEmpty, IsString, IsStrongPassword } from 'class-validator';
 
-@Entity()
+@Entity('User')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

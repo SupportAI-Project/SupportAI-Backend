@@ -7,10 +7,8 @@ import {
 } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { UserService } from './user/user.service';
-import {
-  ERROR_MESSAGES,
-  SUCCESS_MESSAGES,
-} from '@app/common/constants/constants';
+import { SUCCESS_MESSAGES } from '@app/common/constants/constants';
+import { ERROR_MESSAGES } from '@app/common/constants/errors/error.messages';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './user/dto/create-user.dto';
 import { User } from './user/entity/user.model';

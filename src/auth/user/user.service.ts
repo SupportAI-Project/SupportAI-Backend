@@ -9,7 +9,8 @@ import { User } from './entity/user.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { ERROR_MESSAGES, SALT_ROUNDS } from '@app/common/constants/constants';
+import { SALT_ROUNDS } from '@app/common/constants/constants';
+import { ERROR_MESSAGES } from '@app/common/constants/errors/error.messages';
 
 @Injectable()
 export class UserService {
