@@ -32,7 +32,6 @@ export class UserService {
       await this.userRepository.save(newUser);
       return newUser;
     } catch (error) {
-      Logger.error('Error creating user', error);
       throw new InternalServerErrorException(ERROR_MESSAGES.CREATE_USER);
     }
   }

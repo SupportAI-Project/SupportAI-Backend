@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { config } from '@app/common';
+import { ConfigService } from '@nestjs/config';
+const configService = new ConfigService();
 
 import * as passport from 'passport';
 import * as session from 'express-session';
@@ -21,7 +23,7 @@ async function bootstrap() {
 
   app.use(
     session({
-      secret: process.env.JWT_SECRET,
+      secret: configService.get('JWT_SECRET'),
       resave: false,
       saveUninitialized: false,
     }),
