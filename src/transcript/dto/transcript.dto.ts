@@ -8,8 +8,6 @@ export class CreateTranscriptDto {
   @IsNotEmpty()
   message: string;
 
-  // image_url?: string;
-
   @IsNotEmpty()
   chat: Chat;
 }
@@ -17,5 +15,4 @@ export class CreateTranscriptDto {
 export class UpdateTranscriptDto {
   timestamp?: Date;
   message: string;
-  // image_url?: string;
 }

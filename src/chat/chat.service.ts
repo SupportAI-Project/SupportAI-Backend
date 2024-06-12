@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chat } from './entity/chat.model';
 import { Repository } from 'typeorm';
@@ -13,17 +17,19 @@ export class ChatService {
   ) {}
 
   async createChat(chat: CreateChatDto) {
+    Logger.log('Creating chat');
     try {
       const newChat = new Chat();
 
       newChat.customer_id = chat.customer_id;
       newChat.start_time = new Date();
-      newChat.status = 'open';
+      newChat.isOpen = true;
       newChat.transcripts = [];
       newChat.end_time = null;
 
       await this.chatRepository.save(newChat);
     } catch (e) {
+      Logger.error('Error creating chat', e);
       throw new InternalServerErrorException(ERROR_MESSAGES.CREATE_CHAT_ERROR);
     }
   }
@@ -31,6 +37,7 @@ export class ChatService {
     try {
       await this.chatRepository.update(chat_id, chat);
     } catch (e) {
+      Logger.error('Error updating chat', e);
       throw new InternalServerErrorException(ERROR_MESSAGES.UPDATE_CHAT_ERROR);
     }
   }
@@ -38,6 +45,7 @@ export class ChatService {
     try {
       await this.chatRepository.delete({ chat_id });
     } catch (e) {
+      Logger.error('Error deleting chat', e);
       throw new InternalServerErrorException(ERROR_MESSAGES.DELETE_CHAT_ERROR);
     }
   }
@@ -45,6 +53,7 @@ export class ChatService {
     try {
       return this.chatRepository.findOne({ where: { chat_id } });
     } catch (e) {
+      Logger.error('Error getting chat', e);
       throw new InternalServerErrorException(ERROR_MESSAGES.GET_CHAT_ERROR);
     }
   }
@@ -52,6 +61,7 @@ export class ChatService {
     try {
       return this.chatRepository.find();
     } catch (e) {
+      Logger.error('Error getting all chats', e);
       throw new InternalServerErrorException(ERROR_MESSAGES.GET_CHATS_ERROR);
     }
   }

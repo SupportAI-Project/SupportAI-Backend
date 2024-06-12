@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 import { Chat } from 'src/chat/entity/chat.model';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -12,13 +12,14 @@ export class Transcript {
   isSupportSender: boolean;
 
   @Column('date')
+  @IsNotEmpty()
+  @IsDate()
   timestamp: Date;
 
   @Column('text')
+  @IsNotEmpty()
+  @IsString()
   message: string;
-
-  // @Column({ nullable: true })
-  // image_url: string;
 
   @ManyToOne(() => Chat, (chat) => chat.transcripts)
   chat: Chat;

@@ -10,6 +10,6 @@ export class UpdateChatDto {
   start_time?: Date;
   end_time?: Date;
   custemer_id?: number;
-  status?: string;
+  isOpen?: boolean;
   transcripts?: Transcript[];
 }
