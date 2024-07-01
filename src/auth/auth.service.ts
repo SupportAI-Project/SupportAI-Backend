@@ -1,11 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  Logger,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { LoginDto } from './dto/login.dto';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { UserService } from './user/user.service';
 import { SUCCESS_MESSAGES } from '@app/common/constants/app.constants';
 import { ERROR_MESSAGES } from '@app/common/constants/errors/error.messages';
@@ -13,7 +6,6 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './user/dto/create-user.dto';
 import { User } from './user/entity/user.model';
 import { Response } from 'express';
-import * as bcrypt from 'bcryptjs';
 import { TokenPayload } from 'src/interfaces/TokenPayload';
 import { ConfigService } from '@nestjs/config';
 @Injectable()
@@ -24,23 +16,10 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async login(loginDto: LoginDto) {
-    const dbUser = await this.userService.getUser(loginDto.username);
-    if (!dbUser) {
-      Logger.error('User not found');
-      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
-    }
-    const isPasswordMatching = await bcrypt.compare(
-      loginDto.password,
-      dbUser.password,
-    );
-    if (!isPasswordMatching) {
-      Logger.error('password not matching');
-      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
-    }
+  async login(user: User): Promise<{ access_token: string }> {
     const tokenPayload: TokenPayload = {
-      sub: dbUser.id,
-      username: dbUser.username,
+      sub: user.id,
+      username: user.username,
     };
     const jwtToken = await this.jwtService.signAsync(tokenPayload);
 
