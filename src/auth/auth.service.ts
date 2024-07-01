@@ -13,7 +13,6 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './user/dto/create-user.dto';
 import { User } from './user/entity/user.model';
 import { Response } from 'express';
-import { TWO_HOURS_FROM_NOW_DATE } from '@app/common/constants/auth/auth.constants';
 import * as bcrypt from 'bcryptjs';
 import { TokenPayload } from 'src/interfaces/TokenPayload';
 import { ConfigService } from '@nestjs/config';
@@ -25,7 +24,7 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async login(loginDto: LoginDto, response: Response) {
+  async login(loginDto: LoginDto) {
     const dbUser = await this.userService.getUser(loginDto.username);
     if (!dbUser) {
       Logger.error('User not found');
@@ -43,17 +42,14 @@ export class AuthService {
       sub: dbUser.id,
       username: dbUser.username,
     };
-    const jwtToken = this.jwtService.sign(tokenPayload);
+    const jwtToken = await this.jwtService.signAsync(tokenPayload);
 
     const expires = new Date();
     expires.setSeconds(
       expires.getSeconds() + this.configService.get('JWT_EXPIRATION'),
     );
-    response.cookie('Authentication', jwtToken, {
-      httpOnly: true,
-      expires: TWO_HOURS_FROM_NOW_DATE,
-    });
-    return jwtToken;
+
+    return { access_token: jwtToken };
   }
 
   async register(createUserDto: CreateUserDto): Promise<User> {
@@ -101,9 +97,10 @@ export class AuthService {
   async logout(response: Response) {
     try {
       Logger.log('Logging out');
-      response.clearCookie('Authentication');
+      response.clearCookie('access_token');
       response.status(HttpStatus.OK).send(SUCCESS_MESSAGES.USER_LOGGED_OUT);
     } catch (error) {
+      Logger.error('Error logging out: ', error);
       throw new HttpException(
         ERROR_MESSAGES.LOGOUT_FAILED,
         HttpStatus.INTERNAL_SERVER_ERROR,
