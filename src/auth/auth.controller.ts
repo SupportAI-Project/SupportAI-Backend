@@ -30,7 +30,7 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const { access_token } = await this.authService.login(loginDto);
-    response.cookie('access_token', access_token, {
+    response.cookie('Authorization', access_token, {
       httpOnly: true,
       expires: TWO_HOURS_FROM_NOW_DATE,
     });
@@ -47,7 +47,6 @@ export class AuthController {
   @Post('logout')
   async logout(@Res({ passthrough: true }) response: Response) {
     await this.authService.logout(response);
-    return { message: 'Logout successful' };
   }
 
   @UseGuards(JwtAuthGuard)

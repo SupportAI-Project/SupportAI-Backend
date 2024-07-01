@@ -97,7 +97,7 @@ export class AuthService {
   async logout(response: Response) {
     try {
       Logger.log('Logging out');
-      response.clearCookie('access_token');
+      response.clearCookie('Authorization');
       response.status(HttpStatus.OK).send(SUCCESS_MESSAGES.USER_LOGGED_OUT);
     } catch (error) {
       Logger.error('Error logging out: ', error);
