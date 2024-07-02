@@ -34,7 +34,14 @@ import { AdminGuard } from './guards/admin.guard';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, LocalStrategy],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    LocalStrategy,
+    LocalAuthGuard,
+    JwtAuthGuard,
+    AdminGuard,
+  ],
   exports: [AuthService, JwtAuthGuard, LocalAuthGuard, AdminGuard],
 })
 export class AuthModule {}
