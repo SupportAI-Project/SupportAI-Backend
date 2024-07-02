@@ -18,6 +18,7 @@ import { TWO_HOURS_FROM_NOW_DATE } from '@app/common/constants/auth/auth.constan
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CurrentUser } from './current-user.decorator';
+import { AdminGuard } from './guards/admin.guard';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -43,6 +44,7 @@ export class AuthController {
   register(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.authService.register(createUserDto);
   }
+
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('logout')
@@ -51,8 +53,14 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('profile')
+  @Get('regular-user')
   getProfile(@Request() req) {
+    return req.user;
+  }
+
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @Get('admin-user')
+  getAdminProfile(@Request() req) {
     return req.user;
   }
 }

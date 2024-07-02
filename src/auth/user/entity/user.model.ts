@@ -1,5 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
-import { IsNotEmpty, IsString, IsStrongPassword } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsStrongPassword,
+  IsArray,
+  IsOptional,
+} from 'class-validator';
+import { Role } from 'src/auth/roles/role.enum';
 
 @Entity('User')
 export class User extends BaseEntity {
@@ -19,4 +26,9 @@ export class User extends BaseEntity {
   @Column()
   @IsStrongPassword()
   password: string;
+
+  @Column('simple-array', { nullable: true })
+  @IsArray()
+  @IsOptional()
+  roles?: Role[];
 }

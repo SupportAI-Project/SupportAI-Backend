@@ -8,6 +8,7 @@ import { User } from './user/entity/user.model';
 import { Response } from 'express';
 import { TokenPayload } from 'src/interfaces/TokenPayload';
 import { ConfigService } from '@nestjs/config';
+import { Role } from './roles/role.enum';
 @Injectable()
 export class AuthService {
   constructor(
@@ -20,6 +21,7 @@ export class AuthService {
     const tokenPayload: TokenPayload = {
       sub: user.id,
       username: user.username,
+      roles: user.roles,
     };
     const jwtToken = await this.jwtService.signAsync(tokenPayload);
 
@@ -31,17 +33,25 @@ export class AuthService {
     return { access_token: jwtToken };
   }
 
-  async register(createUserDto: CreateUserDto): Promise<User> {
+  async register(
+    createUserDto: CreateUserDto,
+    roles: Role[] = [Role.USER],
+  ): Promise<User> {
     try {
-      const isUserExist =
-        (await this.userService.getUser(createUserDto.username)) !== null;
+      const isUserExist = await this.userService.isUserExistsCheck(
+        createUserDto.username,
+        createUserDto.email,
+      );
       if (isUserExist) {
         throw new HttpException(
           ERROR_MESSAGES.USER_ALREADY_EXISTS,
           HttpStatus.BAD_REQUEST,
         );
       }
-      const newUser = await this.userService.createUser(createUserDto);
+
+      const userWithRole: CreateUserDto = { ...createUserDto, roles };
+
+      const newUser = await this.userService.createUser(userWithRole);
       if (!newUser) {
         Logger.error('Error creating user');
         throw new HttpException(
