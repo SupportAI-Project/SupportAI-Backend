@@ -7,7 +7,6 @@ import {
   Res,
   UseGuards,
   Get,
-  Request,
   Logger,
 } from '@nestjs/common';
 import { Response } from 'express';
@@ -54,13 +53,13 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('regular-user')
-  getProfile(@Request() req) {
-    return req.user;
+  getProfile() {
+    return 'Regular user permissions';
   }
 
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Get('admin-user')
-  getAdminProfile(@Request() req) {
-    return req.user;
+  getAdminProfile() {
+    return 'Admin user permissions';
   }
 }
