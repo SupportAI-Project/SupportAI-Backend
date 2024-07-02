@@ -6,7 +6,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chat } from './entity/chat.model';
 import { Repository } from 'typeorm';
-import { CreateChatDto, UpdateChatDto } from './dto/chat.dto';
+import { CreateChatDto } from './dto/create-chat.dto';
+import { UpdateChatDto } from './dto/update-chat.dto';
 import { ERROR_MESSAGES } from '@app/common/constants/errors/error.messages';
 
 @Injectable()
@@ -19,13 +20,13 @@ export class ChatService {
   async createChat(chat: CreateChatDto) {
     Logger.log('Creating chat');
     try {
-      const newChat = new Chat();
-
-      newChat.customer_id = chat.customer_id;
-      newChat.start_time = new Date();
-      newChat.isOpen = true;
-      newChat.transcripts = [];
-      newChat.end_time = null;
+      const newChat = {
+        ...chat,
+        start_time: new Date(),
+        isOpen: true,
+        transcripts: [],
+        end_time: null,
+      };
 
       await this.chatRepository.save(newChat);
     } catch (e) {

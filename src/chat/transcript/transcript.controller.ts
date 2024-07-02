@@ -9,17 +9,24 @@ import {
   Post,
 } from '@nestjs/common';
 import { TranscriptService } from './transcript.service';
-import { CreateTranscriptDto, UpdateTranscriptDto } from './dto/transcript.dto';
+import { CreateTranscriptDto } from './dto/create-transcript.dto';
+import { UpdateTranscriptDto } from './dto/update-transcript.dto';
 import { Transcript } from './entity/transcript.model';
 
 @Controller('transcripts')
 export class TranscriptController {
   constructor(private readonly transcriptService: TranscriptService) {}
 
-  @Post('upload')
+  @Post('single')
   @HttpCode(HttpStatus.CREATED)
   async uploadTranscript(@Body() transcript: CreateTranscriptDto) {
     await this.transcriptService.createTranscript(transcript);
+  }
+
+  @Post('array')
+  @HttpCode(HttpStatus.CREATED)
+  async uploadTranscriptArray(@Body() transcripts: CreateTranscriptDto[]) {
+    await this.transcriptService.createTranscriptArray(transcripts);
   }
 
   @Post(':id') // id is transcript_id

@@ -3,7 +3,8 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { CreateTranscriptDto, UpdateTranscriptDto } from './dto/transcript.dto';
+import { CreateTranscriptDto } from './dto/create-transcript.dto';
+import { UpdateTranscriptDto } from './dto/update-transcript.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Transcript } from './entity/transcript.model';
 import { Repository } from 'typeorm';
@@ -30,12 +31,10 @@ export class TranscriptService {
   }
   async createTranscript(transcript: CreateTranscriptDto) {
     try {
-      const newTranscript = new Transcript();
-
-      newTranscript.isSupportSender = transcript.isSupportSender;
-      newTranscript.timestamp = new Date();
-      newTranscript.message = transcript.message;
-      newTranscript.chat = transcript.chat;
+      const newTranscript = {
+        ...transcript,
+        timestamp: new Date(),
+      };
 
       await this.transcriptRepository.save(newTranscript);
     } catch (e) {
@@ -45,6 +44,19 @@ export class TranscriptService {
       );
     }
   }
+
+  async createTranscriptArray(transcripts: CreateTranscriptDto[]) {
+    const promises = transcripts.map(async (transcript) => {
+      const newTranscript = {
+        ...transcript,
+        timestamp: new Date(),
+      };
+      this.transcriptRepository.save(newTranscript);
+    });
+
+    await Promise.all(promises);
+  }
+
   async updateTranscript(id: number, transcript: UpdateTranscriptDto) {
     try {
       await this.transcriptRepository.update(id, transcript);

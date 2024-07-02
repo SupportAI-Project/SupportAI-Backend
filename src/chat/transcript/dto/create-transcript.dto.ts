@@ -1,18 +1,17 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 import { Chat } from 'src/chat/entity/chat.model';
 
 export class CreateTranscriptDto {
-  @IsNotEmpty()
+  @IsBoolean()
   isSupportSender: boolean;
 
   @IsNotEmpty()
+  @IsString()
   message: string;
+
+  @IsBoolean()
+  isNote: boolean;
 
   @IsNotEmpty()
   chat: Chat;
-}
-
-export class UpdateTranscriptDto {
-  timestamp?: Date;
-  message: string;
 }

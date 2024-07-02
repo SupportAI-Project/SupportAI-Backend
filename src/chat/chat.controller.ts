@@ -10,7 +10,8 @@ import {
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { Chat } from './entity/chat.model';
-import { CreateChatDto, UpdateChatDto } from './dto/chat.dto';
+import { CreateChatDto } from './dto/create-chat.dto';
+import { UpdateChatDto } from './dto/update-chat.dto';
 
 @Controller('chats')
 export class ChatController {

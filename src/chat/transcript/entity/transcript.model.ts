@@ -1,22 +1,27 @@
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsBoolean, IsDate, IsNotEmpty, IsString } from 'class-validator';
 import { Chat } from 'src/chat/entity/chat.model';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('Transcript')
 export class Transcript {
   @PrimaryGeneratedColumn()
   transcript_id: number;
 
-  @Column('boolean')
-  @IsNotEmpty()
+  @Column()
+  @IsBoolean()
   isSupportSender: boolean;
 
-  @Column('date')
-  @IsNotEmpty()
+  @Column({ default: false })
+  @IsBoolean()
+  isNote: boolean;
+
+  @Column()
   @IsDate()
+  @Type(() => Date)
   timestamp: Date;
 
-  @Column('text')
+  @Column()
   @IsNotEmpty()
   @IsString()
   message: string;
