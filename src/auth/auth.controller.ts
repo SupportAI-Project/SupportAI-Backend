@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
-import { User } from './user/entity/user.model';
+import { User } from '../../libs/common/src/entities/user.model';
 import { CreateUserDto } from './user/dto/create-user.dto';
 import { TWO_HOURS_FROM_NOW_DATE } from '@app/common/constants/auth/auth.constants';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';

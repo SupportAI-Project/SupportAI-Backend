@@ -10,11 +10,11 @@ import { SUCCESS_MESSAGES } from '@app/common/constants/app.constants';
 import { ERROR_MESSAGES } from '@app/common/constants/errors/error.messages';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './user/dto/create-user.dto';
-import { User } from './user/entity/user.model';
+import { User } from '../../libs/common/src/entities/user.model';
 import { Response } from 'express';
-import { TokenPayload } from 'src/interfaces/TokenPayload';
+import { TokenPayload } from '@app/common/interfaces/TokenPayload';
 import { ConfigService } from '@nestjs/config';
-import { Role } from './roles/role.enum';
+import { Role } from '../../libs/common/src/interfaces/role.enum';
 @Injectable()
 export class AuthService {
   constructor(

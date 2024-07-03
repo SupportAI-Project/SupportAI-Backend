@@ -6,7 +6,7 @@ import {
   IsString,
   IsStrongPassword,
 } from 'class-validator';
-import { Role } from 'src/auth/roles/role.enum';
+import { Role } from '@app/common/interfaces/role.enum';
 
 export class CreateUserDto {
   @IsNotEmpty()
