@@ -16,6 +16,7 @@ export class RolesGuard implements CanActivate {
     if (isPublic) {
       return true;
     }
+
     const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -24,6 +25,9 @@ export class RolesGuard implements CanActivate {
       return true;
     }
     const { user } = context.switchToHttp().getRequest();
+    if (user.roles?.includes(Role.ADMIN)) {
+      return true;
+    }
     return requiredRoles.some((role) => user.roles?.includes(role));
   }
 }
