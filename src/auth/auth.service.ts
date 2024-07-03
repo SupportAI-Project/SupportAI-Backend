@@ -43,7 +43,7 @@ export class AuthService {
     createUserDto: CreateUserDto,
     roles: Role[] = [Role.USER],
   ): Promise<User> {
-    const isUserExist = await this.userService.isUserExistsCheck(
+    const isUserExist = await this.userService.validateCreateUserDto(
       createUserDto.username,
       createUserDto.email,
     );

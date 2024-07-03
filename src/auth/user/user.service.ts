@@ -72,7 +72,10 @@ export class UserService {
     }
   }
 
-  async isUserExistsCheck(username: string, email: string): Promise<boolean> {
+  async validateCreateUserDto(
+    username: string,
+    email: string,
+  ): Promise<boolean> {
     try {
       const user = await this.userRepository.findOne({
         where: [{ username }, { email }],
