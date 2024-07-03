@@ -8,6 +8,7 @@ import {
   UseGuards,
   Get,
   Logger,
+  HttpException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
@@ -16,7 +17,7 @@ import { CreateUserDto } from './user/dto/create-user.dto';
 import { TWO_HOURS_FROM_NOW_DATE } from '@app/common/constants/auth/auth.constants';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { CurrentUser } from './current-user.decorator';
+import { CurrentUser } from '../../libs/common/src/decorators/current-user.decorator';
 import { AdminGuard } from './guards/admin.guard';
 @Controller('auth')
 export class AuthController {
@@ -40,8 +41,16 @@ export class AuthController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post('register')
-  register(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.authService.register(createUserDto);
+  async register(@Body() createUserDto: CreateUserDto): Promise<User> {
+    try {
+      return await this.authService.register(createUserDto);
+    } catch (e) {
+      Logger.error('register function error', e.message);
+      throw new HttpException(
+        e.message || 'An error occurred while registering user',
+        e.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @UseGuards(JwtAuthGuard)

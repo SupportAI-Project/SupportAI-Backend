@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { UserService } from './user/user.service';
 import { SUCCESS_MESSAGES } from '@app/common/constants/app.constants';
 import { ERROR_MESSAGES } from '@app/common/constants/errors/error.messages';
@@ -37,50 +43,27 @@ export class AuthService {
     createUserDto: CreateUserDto,
     roles: Role[] = [Role.USER],
   ): Promise<User> {
-    try {
-      const isUserExist = await this.userService.isUserExistsCheck(
-        createUserDto.username,
-        createUserDto.email,
+    const isUserExist = await this.userService.isUserExistsCheck(
+      createUserDto.username,
+      createUserDto.email,
+    );
+    if (isUserExist) {
+      throw new UnprocessableEntityException(
+        ERROR_MESSAGES.USER_ALREADY_EXISTS,
       );
-      if (isUserExist) {
-        throw new HttpException(
-          ERROR_MESSAGES.USER_ALREADY_EXISTS,
-          HttpStatus.BAD_REQUEST,
-        );
-      }
+    }
 
-      const userWithRole: CreateUserDto = { ...createUserDto, roles };
+    const userWithRole: CreateUserDto = { ...createUserDto, roles };
 
-      const newUser = await this.userService.createUser(userWithRole);
-      if (!newUser) {
-        Logger.error('Error creating user');
-        throw new HttpException(
-          ERROR_MESSAGES.CREATE_USER,
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
-      return newUser;
-    } catch (error) {
-      Logger.error('Error creating user: ', error);
-      if (
-        error.message.includes('duplicate key value violates unique constraint')
-      ) {
-        throw new HttpException(
-          ERROR_MESSAGES.USER_ALREADY_EXISTS,
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-      if (error.message.includes(ERROR_MESSAGES.USER_ALREADY_EXISTS)) {
-        throw new HttpException(
-          ERROR_MESSAGES.USER_ALREADY_EXISTS,
-          HttpStatus.BAD_REQUEST,
-        );
-      }
+    const newUser = await this.userService.createUser(userWithRole);
+    if (!newUser) {
+      Logger.error('Error creating user');
       throw new HttpException(
         ERROR_MESSAGES.CREATE_USER,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+    return newUser;
   }
 
   async logout(response: Response) {
