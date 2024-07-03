@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
@@ -19,11 +20,11 @@ export class ChatController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async getChat(@Param('id') chat_id: number): Promise<Chat> {
-    return this.chatService.getChat(chat_id);
+  async getChat(@Param('id') chatId: number): Promise<Chat> {
+    return this.chatService.getChat(chatId);
   }
 
-  @Post('create')
+  @Post()
   @HttpCode(HttpStatus.CREATED)
   async createChat(@Body() createChatDto: CreateChatDto) {
     await this.chatService.createChat(createChatDto);
@@ -31,8 +32,8 @@ export class ChatController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  async deleteChat(@Param('id') chat_id: number) {
-    await this.chatService.deleteChat(chat_id);
+  async deleteChat(@Param('id') chatId: number) {
+    await this.chatService.deleteChat(chatId);
   }
 
   @Get()
@@ -41,12 +42,12 @@ export class ChatController {
     return this.chatService.getAllChats();
   }
 
-  @Post(':id')
+  @Patch(':id')
   @HttpCode(HttpStatus.OK)
   async updateChat(
     @Body() updateChatDto: UpdateChatDto,
-    @Param('id') chat_id: number,
+    @Param('id') chatId: number,
   ) {
-    await this.chatService.updateChat(chat_id, updateChatDto);
+    await this.chatService.updateChat(chatId, updateChatDto);
   }
 }

@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from '@app/common';
 import { UserModule } from 'src/auth/user/user.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { ChatModule } from 'src/chat/chat.module';
+import { TranscriptModule } from 'src/transcript/transcript.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { AuthModule } from 'src/auth/auth.module';
     TypeOrmModule.forRoot(databaseConfig()),
     UserModule,
     AuthModule,
+    ChatModule,
+    TranscriptModule,
   ],
   controllers: [AppController],
   providers: [AppService],

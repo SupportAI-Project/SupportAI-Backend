@@ -1,12 +1,18 @@
 import { Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsNotEmpty, IsString } from 'class-validator';
-import { Chat } from 'src/chat/entity/chat.model';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Chat } from '../../chat/entity/chat.model';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('Transcript')
 export class Transcript {
   @PrimaryGeneratedColumn()
-  transcript_id: number;
+  transcriptId: number;
 
   @Column()
   @IsBoolean()
@@ -19,13 +25,14 @@ export class Transcript {
   @Column()
   @IsDate()
   @Type(() => Date)
-  timestamp: Date;
+  timeStamp: Date;
 
   @Column()
   @IsNotEmpty()
   @IsString()
   message: string;
 
-  @ManyToOne(() => Chat, (chat) => chat.transcripts)
+  @ManyToOne(() => Chat, (chat) => chat.transcripts, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'chatId' })
   chat: Chat;
 }

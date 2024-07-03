@@ -2,6 +2,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chat } from './entity/chat.model';
@@ -22,10 +23,10 @@ export class ChatService {
     try {
       const newChat = {
         ...chat,
-        start_time: new Date(),
+        startTime: new Date(),
         isOpen: true,
         transcripts: [],
-        end_time: null,
+        endTime: null,
       };
 
       await this.chatRepository.save(newChat);
@@ -42,25 +43,36 @@ export class ChatService {
       throw new InternalServerErrorException(ERROR_MESSAGES.UPDATE_CHAT_ERROR);
     }
   }
-  async deleteChat(chat_id: number) {
+  async deleteChat(chatId: number) {
     try {
-      await this.chatRepository.delete({ chat_id });
+      await this.chatRepository.delete({ chatId });
     } catch (e) {
       Logger.error('Error deleting chat', e);
       throw new InternalServerErrorException(ERROR_MESSAGES.DELETE_CHAT_ERROR);
     }
   }
-  async getChat(chat_id: number): Promise<Chat> {
+  async getChat(chatId: number): Promise<Chat> {
     try {
-      return this.chatRepository.findOne({ where: { chat_id } });
+      const chat = await this.chatRepository.findOne({
+        where: { chatId },
+        relations: ['transcripts'],
+      });
+      if (!chat) {
+        throw new NotFoundException(ERROR_MESSAGES.CHAT_NOT_FOUND);
+      }
+      return chat;
     } catch (e) {
       Logger.error('Error getting chat', e);
+      if (e instanceof NotFoundException) {
+        throw e;
+      }
       throw new InternalServerErrorException(ERROR_MESSAGES.GET_CHAT_ERROR);
     }
   }
+
   async getAllChats(): Promise<Chat[]> {
     try {
-      return this.chatRepository.find();
+      return this.chatRepository.find({ relations: ['transcripts'] });
     } catch (e) {
       Logger.error('Error getting all chats', e);
       throw new InternalServerErrorException(ERROR_MESSAGES.GET_CHATS_ERROR);

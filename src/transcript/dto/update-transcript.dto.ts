@@ -4,7 +4,7 @@ import { IsBoolean, IsDate, IsString } from 'class-validator';
 export class UpdateTranscriptDto {
   @IsDate()
   @Type(() => Date)
-  timestamp?: Date;
+  timeStamp?: Date;
 
   @IsString()
   message?: string;

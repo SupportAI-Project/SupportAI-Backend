@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   HttpCode,
   HttpStatus,
   Param,
@@ -11,37 +10,24 @@ import {
 import { TranscriptService } from './transcript.service';
 import { CreateTranscriptDto } from './dto/create-transcript.dto';
 import { UpdateTranscriptDto } from './dto/update-transcript.dto';
-import { Transcript } from './entity/transcript.model';
 
 @Controller('transcripts')
 export class TranscriptController {
   constructor(private readonly transcriptService: TranscriptService) {}
 
-  @Post('single')
+  @Post()
   @HttpCode(HttpStatus.CREATED)
   async uploadTranscript(@Body() transcript: CreateTranscriptDto) {
     await this.transcriptService.createTranscript(transcript);
   }
 
-  @Post('array')
-  @HttpCode(HttpStatus.CREATED)
-  async uploadTranscriptArray(@Body() transcripts: CreateTranscriptDto[]) {
-    await this.transcriptService.createTranscriptArray(transcripts);
-  }
-
-  @Post(':id') // id is transcript_id
+  @Post(':id')
   @HttpCode(HttpStatus.OK)
   async updateTranscript(
     @Body() transcript: UpdateTranscriptDto,
-    @Param('id') id: number,
+    @Param('id') transcriptId: number,
   ) {
-    await this.transcriptService.updateTranscript(id, transcript);
-  }
-
-  @Get(':id') //Id is chat_id
-  @HttpCode(HttpStatus.OK)
-  async getTranscripts(@Param('id') chat_id: number): Promise<Transcript[]> {
-    return this.transcriptService.getTranscripts(chat_id);
+    await this.transcriptService.updateTranscript(transcriptId, transcript);
   }
 
   @Delete(':id')

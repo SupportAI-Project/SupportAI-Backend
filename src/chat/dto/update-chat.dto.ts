@@ -3,26 +3,31 @@ import {
   IsBoolean,
   IsDate,
   IsNumber,
+  IsOptional,
   ValidateNested,
 } from 'class-validator';
-import { Transcript } from 'src/chat/transcript/entity/transcript.model';
+import { Transcript } from '../../transcript/entity/transcript.model';
 import { Type } from 'class-transformer';
 
 export class UpdateChatDto {
+  @IsOptional()
   @IsDate()
   @Type(() => Date)
-  start_time?: Date;
+  startTime?: Date;
 
+  @IsOptional()
   @IsDate()
   @Type(() => Date)
-  end_time?: Date;
+  endTime?: Date;
 
   @IsNumber()
-  customer_id: number;
+  customerId: number;
 
+  @IsOptional()
   @IsBoolean()
   isOpen?: boolean;
 
+  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => Transcript)
