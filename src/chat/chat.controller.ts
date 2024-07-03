@@ -27,7 +27,7 @@ export class ChatController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createChat(@Body() createChatDto: CreateChatDto) {
-    await this.chatService.createChat(createChatDto);
+    return await this.chatService.createChat(createChatDto);
   }
 
   @Delete(':id')

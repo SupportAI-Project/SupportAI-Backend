@@ -37,6 +37,7 @@ export class TranscriptService {
       newTranscript.chat = chat;
 
       await this.transcriptRepository.save(newTranscript);
+      return newTranscript;
     } catch (e) {
       Logger.error('Error creating transcript', e);
       if (e instanceof NotFoundException) {

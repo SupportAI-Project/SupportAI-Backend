@@ -21,15 +21,16 @@ export class ChatService {
   async createChat(chat: CreateChatDto) {
     Logger.log('Creating chat');
     try {
-      const newChat = {
+      const newChat = await this.chatRepository.create({
         ...chat,
         startTime: new Date(),
         isOpen: true,
         transcripts: [],
         endTime: null,
-      };
+      });
 
       await this.chatRepository.save(newChat);
+      return newChat;
     } catch (e) {
       Logger.error('Error creating chat', e);
       throw new InternalServerErrorException(ERROR_MESSAGES.CREATE_CHAT_ERROR);
@@ -72,7 +73,7 @@ export class ChatService {
 
   async getAllChats(): Promise<Chat[]> {
     try {
-      return this.chatRepository.find({ relations: ['transcripts'] });
+      return this.chatRepository.find();
     } catch (e) {
       Logger.error('Error getting all chats', e);
       throw new InternalServerErrorException(ERROR_MESSAGES.GET_CHATS_ERROR);

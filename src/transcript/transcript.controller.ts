@@ -18,7 +18,7 @@ export class TranscriptController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async uploadTranscript(@Body() transcript: CreateTranscriptDto) {
-    await this.transcriptService.createTranscript(transcript);
+    return await this.transcriptService.createTranscript(transcript);
   }
 
   @Post(':id')
