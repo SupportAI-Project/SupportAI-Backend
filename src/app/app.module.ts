@@ -7,7 +7,7 @@ import { databaseConfig } from '@app/common';
 import { UserModule } from 'src/auth/user/user.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { ChatModule } from 'src/chat/chat.module';
-import { TranscriptModule } from 'src/transcript/transcript.module';
+import { TranscriptModule } from 'src/chat/transcript/transcript.module';
 
 @Module({
   imports: [

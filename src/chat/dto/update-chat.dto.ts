@@ -6,7 +6,7 @@ import {
   IsOptional,
   ValidateNested,
 } from 'class-validator';
-import { Transcript } from '../../transcript/entity/transcript.model';
+import { Transcript } from '../transcript/entity/transcript.model';
 import { Type } from 'class-transformer';
 
 export class UpdateChatDto {

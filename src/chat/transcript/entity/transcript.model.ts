@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsNotEmpty, IsString } from 'class-validator';
-import { Chat } from '../../chat/entity/chat.model';
+import { Chat } from '../../entity/chat.model';
 import {
   Column,
   Entity,

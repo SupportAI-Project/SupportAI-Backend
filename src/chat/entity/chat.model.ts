@@ -1,5 +1,5 @@
 import { IsBoolean, IsDate, IsNumber } from 'class-validator';
-import { Transcript } from '../../transcript/entity/transcript.model';
+import { Transcript } from '../transcript/entity/transcript.model';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('Chat')

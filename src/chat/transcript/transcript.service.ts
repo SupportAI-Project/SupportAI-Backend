@@ -9,7 +9,7 @@ import { UpdateTranscriptDto } from './dto/update-transcript.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Transcript } from './entity/transcript.model';
 import { Repository } from 'typeorm';
-import { ERROR_MESSAGES } from '@app/common/constants/errors/error.messages';
+import { ERROR_MESSAGES } from '@app/common/constants/errors/chat.messages';
 
 @Injectable()
 export class TranscriptService {
