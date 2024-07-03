@@ -32,6 +32,9 @@ export class Transcript {
   @IsString()
   message: string;
 
+  @Column({ name: 'chatId' })
+  chatId: number;
+
   @ManyToOne(() => Chat, (chat) => chat.transcripts, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'chatId' })
   chat: Chat;

@@ -10,33 +10,23 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Transcript } from './entity/transcript.model';
 import { Repository } from 'typeorm';
 import { ERROR_MESSAGES } from '@app/common/constants/errors/error.messages';
-import { ChatService } from '../chat/chat.service';
 
 @Injectable()
 export class TranscriptService {
   constructor(
     @InjectRepository(Transcript)
     private transcriptRepository: Repository<Transcript>,
-    private chatService: ChatService,
   ) {}
 
   async createTranscript(transcript: CreateTranscriptDto) {
     try {
-      const chat = await this.chatService.getChat(transcript.chatId);
-      if (!chat) {
-        throw new NotFoundException(ERROR_MESSAGES.CHAT_NOT_FOUND);
-      }
-
       const newTranscript = this.transcriptRepository.create({
-        isNote: transcript.isNote,
-        message: transcript.message,
-        isSupportSender: transcript.isSupportSender,
+        ...transcript,
         timeStamp: new Date(),
       });
 
-      newTranscript.chat = chat;
-
       await this.transcriptRepository.save(newTranscript);
+
       return newTranscript;
     } catch (e) {
       Logger.error('Error creating transcript', e);
