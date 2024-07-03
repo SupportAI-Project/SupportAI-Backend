@@ -10,7 +10,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
-import { AdminGuard } from './guards/admin.guard';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [
@@ -40,8 +40,8 @@ import { AdminGuard } from './guards/admin.guard';
     LocalStrategy,
     LocalAuthGuard,
     JwtAuthGuard,
-    AdminGuard,
+    RolesGuard,
   ],
-  exports: [AuthService, JwtAuthGuard, LocalAuthGuard, AdminGuard],
+  exports: [AuthService, JwtAuthGuard, LocalAuthGuard, RolesGuard],
 })
 export class AuthModule {}
