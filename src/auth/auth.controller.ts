@@ -17,6 +17,7 @@ import { TWO_HOURS_FROM_NOW_DATE } from '@app/common/constants/auth/auth.constan
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CurrentUser } from '../../libs/common/src/decorators/current-user.decorator';
+import { Public } from '@app/common/decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -25,6 +26,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('login')
+  @Public()
   async login(
     @CurrentUser() user: User,
     @Res({ passthrough: true }) response: Response,
@@ -40,6 +42,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post('register')
+  @Public()
   async register(@Body() createUserDto: CreateUserDto): Promise<User> {
     try {
       return await this.authService.register(createUserDto);
