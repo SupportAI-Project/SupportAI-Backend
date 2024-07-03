@@ -1,4 +1,6 @@
 import {
+  HttpException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -53,7 +55,7 @@ export class UserService {
     }
   }
 
-  async verifyUser(email: string, password: string) {
+  async verifyAndGetUser(email: string, password: string) {
     try {
       const user = await this.getUser(email);
       const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -63,6 +65,10 @@ export class UserService {
       return user;
     } catch (error) {
       Logger.error('Error verifying user', error);
+      throw new HttpException(
+        error.message || ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        error.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -74,6 +80,10 @@ export class UserService {
       return user ? true : false;
     } catch (error) {
       Logger.error('Error checking if user exists', error);
+      throw new HttpException(
+        error.message || ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        error.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

@@ -5,4 +5,5 @@ export const ERROR_MESSAGES = {
   USERNAME_TAKEN: 'Username already taken',
   CREATE_USER: 'Error creating user',
   LOGOUT_FAILED: 'Error logging out',
+  INTERNAL_SERVER_ERROR: 'Internal server error',
 };

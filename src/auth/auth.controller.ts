@@ -6,7 +6,6 @@ import {
   Post,
   Res,
   UseGuards,
-  Get,
   Logger,
   HttpException,
 } from '@nestjs/common';
@@ -18,7 +17,6 @@ import { TWO_HOURS_FROM_NOW_DATE } from '@app/common/constants/auth/auth.constan
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CurrentUser } from '../../libs/common/src/decorators/current-user.decorator';
-import { AdminGuard } from './guards/admin.guard';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -58,17 +56,5 @@ export class AuthController {
   @Post('logout')
   async logout(@Res({ passthrough: true }) response: Response) {
     await this.authService.logout(response);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('regular-user')
-  getProfile() {
-    return 'Regular user permissions';
-  }
-
-  @UseGuards(JwtAuthGuard, AdminGuard)
-  @Get('admin-user')
-  getAdminProfile() {
-    return 'Admin user permissions';
   }
 }
