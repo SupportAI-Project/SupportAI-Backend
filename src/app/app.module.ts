@@ -6,6 +6,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from '@app/common';
 import { UserModule } from 'src/auth/user/user.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ChatModule } from 'src/chat/chat.module';
 import { TranscriptModule } from 'src/chat/transcript/transcript.module';
 
@@ -19,6 +22,16 @@ import { TranscriptModule } from 'src/chat/transcript/transcript.module';
     TranscriptModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

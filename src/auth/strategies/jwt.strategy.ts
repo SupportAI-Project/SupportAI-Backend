@@ -1,42 +1,35 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, JwtFromRequestFunction, Strategy } from 'passport-jwt';
-import { UserService } from '../user/user.service';
-import { TokenPayload } from 'src/interfaces/TokenPayload';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { TokenPayload } from '@app/common/interfaces/TokenPayload';
+import { JwtFromRequestFunction } from 'passport-jwt';
+import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    private readonly usersService: UserService,
-    configService: ConfigService,
-  ) {
-    Logger.log('JwtStrategy constructor');
+  constructor(private configService: ConfigService) {
     const jwtExtractor: JwtFromRequestFunction<any> = (request: any) => {
       Logger.log('JwtStrategy jwtExtractor');
-      let token =
-        request?.cookies?.Authentication ||
-        request?.Authentication ||
-        request?.headers.Authentication ||
-        request?.headers.authentication ||
-        request?.headers.authorization ||
-        request?.authentication;
-      token = token.replace('Bearer ', '');
+      const token = request?.cookies?.Authorization;
       if (!token) {
         Logger.error('No token found');
         return null;
       }
       return token;
     };
-
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([jwtExtractor]),
-      secretOrKey: configService.get('JWT_SECRET'),
+      ignoreExpiration: false,
+      secretOrKey: configService.get<string>('JWT_SECRET'),
     });
   }
 
   async validate(payload: TokenPayload) {
-    Logger.log('JwtStrategy validate');
-    return await this.usersService.getUser(payload.username);
+    return {
+      userId: payload.sub,
+      username: payload.username,
+      roles: payload.roles,
+    };
   }
 }

@@ -9,4 +9,7 @@ export const ERROR_MESSAGES = {
   DELETE_CHAT_ERROR: 'Error deleting chat',
   GET_CHAT_ERROR: 'Error fetching chat',
   CHAT_NOT_FOUND: 'Chat not found',
+  INTERNAL_SERVER_ERROR: 'Internal server error',
+  INVALID_CREDENTIALS: 'Invalid credentials',
+  CREATE_USER: 'Error creating user',
 };

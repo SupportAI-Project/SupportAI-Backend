@@ -3,6 +3,8 @@ import { AppModule } from './app/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { config } from '@app/common';
 import { ConfigService } from '@nestjs/config';
+import * as cookieParser from 'cookie-parser';
+
 const configService = new ConfigService();
 
 import * as passport from 'passport';
@@ -23,13 +25,14 @@ async function bootstrap() {
 
   app.use(
     session({
-      secret: configService.get('JWT_SECRET'),
+      secret: configService.get('SESSION_SECRET'),
       resave: false,
       saveUninitialized: false,
     }),
   );
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(cookieParser());
   await app.listen(3000);
 }
 bootstrap();
