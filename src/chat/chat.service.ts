@@ -9,7 +9,7 @@ import { Chat } from './entity/chat.model';
 import { Repository } from 'typeorm';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
-import { ERROR_MESSAGES } from '@app/common/constants/errors/error.messages';
+import { ERROR_MESSAGES } from '@app/common/constants/errors/chat.messages';
 
 @Injectable()
 export class ChatService {
