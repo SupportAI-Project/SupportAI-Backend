@@ -12,8 +12,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { SALT_ROUNDS } from '@app/common/constants/auth/auth.constants';
-import { ERROR_MESSAGES } from '@app/common/constants/errors/error.messages';
 import { Role } from '../../../libs/common/src/interfaces/role.enum';
+import { ERROR_MESSAGES } from '@app/common/constants/errors/chat.messages';
 
 @Injectable()
 export class UserService {
