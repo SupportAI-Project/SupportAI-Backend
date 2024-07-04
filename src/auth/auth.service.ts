@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user/user.service';
 import { SUCCESS_MESSAGES } from '@app/common/constants/app.constants';
-import { ERROR_MESSAGES } from '@app/common/constants/errors/error.messages';
 import { JwtService } from '@nestjs/jwt';
+import { ERROR_MESSAGES } from '@app/common/constants/errors/error.messages';
 import { CreateUserDto } from './user/dto/create-user.dto';
 import { User } from '../../libs/common/src/entities/user.model';
 import { Response } from 'express';
