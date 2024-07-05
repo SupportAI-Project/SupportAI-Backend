@@ -1,6 +1,14 @@
 import { IsBoolean, IsDate, IsNumber } from 'class-validator';
 import { Transcript } from '../transcript/entity/transcript.model';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from '@app/common/entities/user.model';
 
 @Entity('Chat')
 export class Chat {
@@ -24,4 +32,8 @@ export class Chat {
 
   @OneToMany(() => Transcript, (transcript) => transcript.chat)
   transcripts: Transcript[];
+
+  @OneToOne(() => User, (user) => user.chat)
+  @JoinColumn({ name: 'customerId' })
+  customer: User;
 }
