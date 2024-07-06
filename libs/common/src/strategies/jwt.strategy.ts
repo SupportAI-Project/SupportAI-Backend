@@ -1,20 +1,18 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { TokenPayload } from '@app/common/interfaces/TokenPayload';
+import { TokenPayload } from '@app/common';
 import { JwtFromRequestFunction } from 'passport-jwt';
-import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private configService: ConfigService) {
     const jwtExtractor: JwtFromRequestFunction<any> = (request: any) => {
-      Logger.log('JwtStrategy jwtExtractor');
       const token = request?.cookies?.Authorization;
       if (!token) {
-        Logger.error('No token found');
-        return null;
+        Logger.error('Unauthorized token', 'JwtStrategy');
+        throw new UnauthorizedException('Unauthorized token');
       }
       return token;
     };
