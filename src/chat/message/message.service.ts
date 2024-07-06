@@ -15,19 +15,19 @@ import { CHAT_ERROR_MESSAGES } from '@app/common';
 export class MessageService {
   constructor(
     @InjectRepository(Message)
-    private transcriptRepository: Repository<Message>,
+    private messageRepository: Repository<Message>,
   ) {}
 
-  async createTranscript(transcript: CreateMessageDto) {
+  async createTranscript(message: CreateMessageDto) {
     try {
-      const newTranscript = this.transcriptRepository.create({
-        ...transcript,
+      const newMessage = this.messageRepository.create({
+        ...message,
         timeStamp: new Date(),
       });
 
-      await this.transcriptRepository.save(newTranscript);
+      await this.messageRepository.save(newMessage);
 
-      return newTranscript;
+      return newMessage;
     } catch (e) {
       Logger.error('Error creating transcript', e);
       if (e instanceof NotFoundException) {
@@ -41,7 +41,7 @@ export class MessageService {
 
   async updateTranscript(id: number, transcript: UpdateMessageDto) {
     try {
-      await this.transcriptRepository.update(id, transcript);
+      await this.messageRepository.update(id, transcript);
     } catch (e) {
       Logger.error('Error updating transcript', e);
       throw new InternalServerErrorException(
@@ -52,7 +52,7 @@ export class MessageService {
 
   async deleteTranscript(transcriptId: number) {
     try {
-      await this.transcriptRepository.delete({ transcriptId: transcriptId });
+      await this.messageRepository.delete({ transcriptId: transcriptId });
     } catch (e) {
       Logger.error('Error deleting transcript', e);
       throw new InternalServerErrorException(

@@ -17,8 +17,8 @@ export class MessageController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async uploadTranscript(@Body() transcript: CreateMessageDto) {
-    return await this.transcriptService.createTranscript(transcript);
+  async uploadTranscript(@Body() message: CreateMessageDto) {
+    return await this.transcriptService.createTranscript(message);
   }
 
   @Post(':id')

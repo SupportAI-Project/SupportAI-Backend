@@ -30,7 +30,7 @@ export class Message {
   @Column()
   @IsNotEmpty()
   @IsString()
-  message: string;
+  content: string;
 
   @Column({ name: 'chatId' })
   chatId: number;

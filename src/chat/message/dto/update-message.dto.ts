@@ -7,7 +7,7 @@ export class UpdateMessageDto {
   timeStamp?: Date;
 
   @IsString()
-  message?: string;
+  content?: string;
 
   @IsBoolean()
   isNote?: boolean;

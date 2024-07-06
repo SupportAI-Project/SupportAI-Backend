@@ -6,7 +6,7 @@ export class CreateMessageDto {
 
   @IsNotEmpty()
   @IsString()
-  message: string;
+  content: string;
 
   @IsBoolean()
   isNote: boolean;
