@@ -4,21 +4,21 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateTranscriptDto } from './dto/create-transcript.dto';
-import { UpdateTranscriptDto } from './dto/update-transcript.dto';
+import { CreateMessageDto } from './dto/create-message.dto';
+import { UpdateMessageDto } from './dto/update-message.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Transcript } from './entity/transcript.entity';
+import { Message } from './entity/message.entity';
 import { Repository } from 'typeorm';
 import { CHAT_ERROR_MESSAGES } from '@app/common';
 
 @Injectable()
-export class TranscriptService {
+export class MessageService {
   constructor(
-    @InjectRepository(Transcript)
-    private transcriptRepository: Repository<Transcript>,
+    @InjectRepository(Message)
+    private transcriptRepository: Repository<Message>,
   ) {}
 
-  async createTranscript(transcript: CreateTranscriptDto) {
+  async createTranscript(transcript: CreateMessageDto) {
     try {
       const newTranscript = this.transcriptRepository.create({
         ...transcript,
@@ -39,7 +39,7 @@ export class TranscriptService {
     }
   }
 
-  async updateTranscript(id: number, transcript: UpdateTranscriptDto) {
+  async updateTranscript(id: number, transcript: UpdateMessageDto) {
     try {
       await this.transcriptRepository.update(id, transcript);
     } catch (e) {

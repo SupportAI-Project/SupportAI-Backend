@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 @Entity('Transcript')
-export class Transcript {
+export class Message {
   @PrimaryGeneratedColumn()
   transcriptId: number;
 

@@ -6,7 +6,7 @@ import {
   IsOptional,
   ValidateNested,
 } from 'class-validator';
-import { Transcript } from '../transcript/entity/transcript.entity';
+import { Message } from '../message/entity/message.entity';
 import { Type } from 'class-transformer';
 
 export class UpdateChatDto {
@@ -30,6 +30,6 @@ export class UpdateChatDto {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => Transcript)
-  transcripts?: Transcript[];
+  @Type(() => Message)
+  transcripts?: Message[];
 }

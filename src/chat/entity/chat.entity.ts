@@ -1,5 +1,5 @@
 import { IsBoolean, IsDate, IsNumber } from 'class-validator';
-import { Transcript } from '../transcript/entity/transcript.entity';
+import { Message } from '../message/entity/message.entity';
 import {
   Column,
   Entity,
@@ -29,8 +29,8 @@ export class Chat {
   @IsBoolean()
   isOpen: boolean;
 
-  @OneToMany(() => Transcript, (transcript) => transcript.chat)
-  transcripts: Transcript[];
+  @OneToMany(() => Message, (transcript) => transcript.chat)
+  transcripts: Message[];
 
   @OneToOne(() => User, (user) => user.chat)
   @JoinColumn({ name: 'customerId' })

@@ -8,7 +8,7 @@ import { UserModule } from 'src/auth/user/user.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ChatModule } from 'src/chat/chat.module';
-import { TranscriptModule } from 'src/chat/transcript/transcript.module';
+import { TranscriptModule } from 'src/chat/message/transcript.module';
 import { LoggerModule } from 'nestjs-pino';
 import { HttpExceptionFilter } from '@app/common';
 
