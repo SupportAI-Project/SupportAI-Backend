@@ -6,10 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig, JwtAuthGuard, RolesGuard } from '@app/common';
 import { UserModule } from 'src/auth/user/user.module';
 import { AuthModule } from 'src/auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ChatModule } from 'src/chat/chat.module';
 import { TranscriptModule } from 'src/chat/transcript/transcript.module';
 import { LoggerModule } from 'nestjs-pino';
+import { HttpExceptionFilter } from '@app/common';
 
 @Module({
   imports: [
@@ -41,6 +42,10 @@ import { LoggerModule } from 'nestjs-pino';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
     },
   ],
 })
