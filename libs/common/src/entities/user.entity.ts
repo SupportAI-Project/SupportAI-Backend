@@ -6,7 +6,7 @@ import {
   IsArray,
   IsOptional,
 } from 'class-validator';
-import { Role } from '../interfaces/role.enum';
+import { Role } from '@app/common';
 
 @Entity('User')
 export class User extends BaseEntity {

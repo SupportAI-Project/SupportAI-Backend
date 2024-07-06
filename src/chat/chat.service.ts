@@ -5,11 +5,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Chat } from './entity/chat.model';
+import { Chat } from './entity/chat.entity';
 import { Repository } from 'typeorm';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
-import { ERROR_MESSAGES } from '@app/common/constants/errors/chat.messages';
+import { CHAT_ERROR_MESSAGES } from '@app/common';
 
 @Injectable()
 export class ChatService {
@@ -19,7 +19,6 @@ export class ChatService {
   ) {}
 
   async createChat(chat: CreateChatDto) {
-    Logger.log('Creating chat');
     try {
       const newChat = await this.chatRepository.create({
         ...chat,
@@ -33,7 +32,9 @@ export class ChatService {
       return newChat;
     } catch (e) {
       Logger.error('Error creating chat', e);
-      throw new InternalServerErrorException(ERROR_MESSAGES.CREATE_CHAT_ERROR);
+      throw new InternalServerErrorException(
+        CHAT_ERROR_MESSAGES.CREATE_CHAT_ERROR,
+      );
     }
   }
   async updateChat(chat_id: number, chat: UpdateChatDto) {
@@ -41,7 +42,9 @@ export class ChatService {
       await this.chatRepository.update(chat_id, chat);
     } catch (e) {
       Logger.error('Error updating chat', e);
-      throw new InternalServerErrorException(ERROR_MESSAGES.UPDATE_CHAT_ERROR);
+      throw new InternalServerErrorException(
+        CHAT_ERROR_MESSAGES.UPDATE_CHAT_ERROR,
+      );
     }
   }
   async deleteChat(chatId: number) {
@@ -49,7 +52,9 @@ export class ChatService {
       await this.chatRepository.delete({ chatId });
     } catch (e) {
       Logger.error('Error deleting chat', e);
-      throw new InternalServerErrorException(ERROR_MESSAGES.DELETE_CHAT_ERROR);
+      throw new InternalServerErrorException(
+        CHAT_ERROR_MESSAGES.DELETE_CHAT_ERROR,
+      );
     }
   }
   async getChat(chatId: number): Promise<Chat> {
@@ -59,7 +64,7 @@ export class ChatService {
         relations: ['transcripts'],
       });
       if (!chat) {
-        throw new NotFoundException(ERROR_MESSAGES.CHAT_NOT_FOUND);
+        throw new NotFoundException(CHAT_ERROR_MESSAGES.CHAT_NOT_FOUND);
       }
       return chat;
     } catch (e) {
@@ -67,7 +72,9 @@ export class ChatService {
       if (e instanceof NotFoundException) {
         throw e;
       }
-      throw new InternalServerErrorException(ERROR_MESSAGES.GET_CHAT_ERROR);
+      throw new InternalServerErrorException(
+        CHAT_ERROR_MESSAGES.GET_CHAT_ERROR,
+      );
     }
   }
 
@@ -76,7 +83,9 @@ export class ChatService {
       return this.chatRepository.find();
     } catch (e) {
       Logger.error('Error getting all chats', e);
-      throw new InternalServerErrorException(ERROR_MESSAGES.GET_CHATS_ERROR);
+      throw new InternalServerErrorException(
+        CHAT_ERROR_MESSAGES.GET_CHATS_ERROR,
+      );
     }
   }
 }

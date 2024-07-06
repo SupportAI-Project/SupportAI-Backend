@@ -6,15 +6,15 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { UserService } from './user/user.service';
-import { SUCCESS_MESSAGES } from '@app/common/constants/app.constants';
-import { ERROR_MESSAGES } from '@app/common/constants/errors/user.messages';
+import { SUCCESS_MESSAGES } from '@app/common';
+import { USER_ERROR_MESSAGES } from '@app/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './user/dto/create-user.dto';
-import { User } from '../../libs/common/src/entities/user.model';
+import { User } from '@app/common';
 import { Response } from 'express';
-import { TokenPayload } from '@app/common/interfaces/TokenPayload';
+import { TokenPayload } from '@app/common';
 import { ConfigService } from '@nestjs/config';
-import { Role } from '../../libs/common/src/interfaces/role.enum';
+import { Role } from '@app/common';
 @Injectable()
 export class AuthService {
   constructor(
@@ -49,7 +49,7 @@ export class AuthService {
     );
     if (isUserExist) {
       throw new UnprocessableEntityException(
-        ERROR_MESSAGES.USER_ALREADY_EXISTS,
+        USER_ERROR_MESSAGES.USER_ALREADY_EXISTS,
       );
     }
 
@@ -59,7 +59,7 @@ export class AuthService {
     if (!newUser) {
       Logger.error('Error creating user');
       throw new HttpException(
-        ERROR_MESSAGES.CREATE_USER,
+        USER_ERROR_MESSAGES.CREATE_USER,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -68,13 +68,12 @@ export class AuthService {
 
   async logout(response: Response) {
     try {
-      Logger.log('Logging out');
       response.clearCookie('Authorization');
       response.status(HttpStatus.OK).send(SUCCESS_MESSAGES.USER_LOGGED_OUT);
     } catch (error) {
       Logger.error('Error logging out: ', error);
       throw new HttpException(
-        ERROR_MESSAGES.LOGOUT_FAILED,
+        USER_ERROR_MESSAGES.LOGOUT_FAILED,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

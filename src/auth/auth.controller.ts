@@ -11,13 +11,13 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
-import { User } from '../../libs/common/src/entities/user.model';
+import { User } from '@app/common';
 import { CreateUserDto } from './user/dto/create-user.dto';
-import { TWO_HOURS_FROM_NOW_DATE } from '@app/common/constants/auth/auth.constants';
+import { TWO_HOURS_FROM_NOW_DATE } from '@app/common';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { CurrentUser } from '../../libs/common/src/decorators/current-user.decorator';
-import { Public } from '@app/common/decorators/public.decorator';
+import { CurrentUser } from '@app/common';
+import { Public } from '@app/common';
 
 @Controller('auth')
 export class AuthController {
@@ -31,7 +31,6 @@ export class AuthController {
     @CurrentUser() user: User,
     @Res({ passthrough: true }) response: Response,
   ) {
-    Logger.log('current user', JSON.stringify(user));
     const { access_token } = await this.authService.login(user);
     response.cookie('Authorization', access_token, {
       httpOnly: true,

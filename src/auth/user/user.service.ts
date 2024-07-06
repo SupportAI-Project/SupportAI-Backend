@@ -7,13 +7,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from '../../../libs/common/src/entities/user.model';
+import { User } from '@app/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { SALT_ROUNDS } from '@app/common/constants/auth/auth.constants';
-import { Role } from '../../../libs/common/src/interfaces/role.enum';
-import { ERROR_MESSAGES } from '@app/common/constants/errors/chat.messages';
+import { SALT_ROUNDS } from '@app/common';
+import { Role } from '@app/common';
+import { CHAT_ERROR_MESSAGES } from '@app/common';
 
 @Injectable()
 export class UserService {
@@ -35,12 +35,12 @@ export class UserService {
       });
       if (!newUser) {
         Logger.error('Error creating user');
-        throw new InternalServerErrorException(ERROR_MESSAGES.CREATE_USER);
+        throw new InternalServerErrorException(CHAT_ERROR_MESSAGES.CREATE_USER);
       }
       await this.userRepository.save(newUser);
       return newUser;
     } catch (error) {
-      throw new InternalServerErrorException(ERROR_MESSAGES.CREATE_USER);
+      throw new InternalServerErrorException(CHAT_ERROR_MESSAGES.CREATE_USER);
     }
   }
 
@@ -60,13 +60,13 @@ export class UserService {
       const user = await this.getUser(email);
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
+        throw new UnauthorizedException(CHAT_ERROR_MESSAGES.INVALID_CREDENTIALS);
       }
       return user;
     } catch (error) {
       Logger.error('Error verifying user', error);
       throw new HttpException(
-        error.message || ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        error.message || CHAT_ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
         error.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -84,7 +84,7 @@ export class UserService {
     } catch (error) {
       Logger.error('Error checking if user exists', error);
       throw new HttpException(
-        error.message || ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        error.message || CHAT_ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
         error.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
