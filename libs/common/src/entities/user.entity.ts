@@ -12,8 +12,8 @@ import {
   IsArray,
   IsOptional,
 } from 'class-validator';
-import { Role } from '../interfaces/role.enum';
-import { Chat } from 'src/chat/entity/chat.model';
+import { Chat } from 'src/chat/entity/chat.entity';
+import { Role } from '../types';
 
 @Entity('User')
 export class User extends BaseEntity {

@@ -7,9 +7,9 @@ import {
 import { CreateTranscriptDto } from './dto/create-transcript.dto';
 import { UpdateTranscriptDto } from './dto/update-transcript.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Transcript } from './entity/transcript.model';
+import { Transcript } from './entity/transcript.entity';
 import { Repository } from 'typeorm';
-import { ERROR_MESSAGES } from '@app/common/constants/errors/chat.messages';
+import { CHAT_ERROR_MESSAGES } from '@app/common';
 
 @Injectable()
 export class TranscriptService {
@@ -34,7 +34,7 @@ export class TranscriptService {
         throw e;
       }
       throw new InternalServerErrorException(
-        ERROR_MESSAGES.CREATE_TRANSCRIPT_ERROR,
+        CHAT_ERROR_MESSAGES.CREATE_TRANSCRIPT_ERROR,
       );
     }
   }
@@ -45,7 +45,7 @@ export class TranscriptService {
     } catch (e) {
       Logger.error('Error updating transcript', e);
       throw new InternalServerErrorException(
-        ERROR_MESSAGES.UPDATE_TRANSCRIPT_ERROR,
+        CHAT_ERROR_MESSAGES.UPDATE_TRANSCRIPT_ERROR,
       );
     }
   }
@@ -56,7 +56,7 @@ export class TranscriptService {
     } catch (e) {
       Logger.error('Error deleting transcript', e);
       throw new InternalServerErrorException(
-        ERROR_MESSAGES.DELETE_TRANSCRIPT_ERROR,
+        CHAT_ERROR_MESSAGES.DELETE_TRANSCRIPT_ERROR,
       );
     }
   }
