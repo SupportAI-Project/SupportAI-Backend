@@ -30,7 +30,7 @@ export class Chat {
   isOpen: boolean;
 
   @OneToMany(() => Message, (transcript) => transcript.chat)
-  transcripts: Message[];
+  messages: Message[];
 
   @OneToOne(() => User, (user) => user.chat)
   @JoinColumn({ name: 'customerId' })

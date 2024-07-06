@@ -35,7 +35,7 @@ export class Message {
   @Column({ name: 'chatId' })
   chatId: number;
 
-  @ManyToOne(() => Chat, (chat) => chat.transcripts, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Chat, (chat) => chat.messages, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'chatId' })
   chat: Chat;
 }

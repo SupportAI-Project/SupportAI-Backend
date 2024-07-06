@@ -24,7 +24,7 @@ export class ChatService {
         ...chat,
         startTime: new Date(),
         isOpen: true,
-        transcripts: [],
+        messages: [],
         endTime: null,
       });
 
