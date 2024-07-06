@@ -1,6 +1,6 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TokenPayload } from '@app/common';
 import { JwtFromRequestFunction } from 'passport-jwt';
@@ -11,6 +11,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const jwtExtractor: JwtFromRequestFunction<any> = (request: any) => {
       const token = request?.cookies?.Authorization;
       if (!token) {
+        Logger.error('Unauthorized token', 'JwtStrategy');
         throw new UnauthorizedException('Unauthorized token');
       }
       return token;
