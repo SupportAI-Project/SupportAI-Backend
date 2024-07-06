@@ -14,7 +14,7 @@ import { AuthService } from './auth.service';
 import { User } from '@app/common';
 import { CreateUserDto } from './user/dto/create-user.dto';
 import { TWO_HOURS_FROM_NOW_DATE } from '@app/common';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@app/common';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CurrentUser } from '@app/common';
 import { Public } from '@app/common';
