@@ -3,7 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BaseEntity,
-  OneToOne,
+  OneToMany,
 } from 'typeorm';
 import {
   IsNotEmpty,
@@ -12,13 +12,13 @@ import {
   IsArray,
   IsOptional,
 } from 'class-validator';
-import { Chat } from 'src/chat/entity/chat.entity';
+import { Chat } from './chat.entity';
 import { Role } from '../types';
 
 @Entity('User')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  userId: number;
 
   @Column({ unique: true })
   @IsNotEmpty()
@@ -39,7 +39,7 @@ export class User extends BaseEntity {
   @IsOptional()
   roles?: Role[];
 
-  @OneToOne(() => Chat, (chat) => chat.customer)
+  @OneToMany(() => Chat, (chat) => chat.customer)
   @IsOptional()
-  chat?: Chat;
+  chats?: Chat[];
 }

@@ -1,7 +1,14 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { User } from '../entities/user.entity';
+import { User } from '../entities';
+import { Logger } from '@nestjs/common';
 const getCurrentUserByContext = (context: ExecutionContext): User => {
-  return context.switchToHttp().getRequest().user;
+  if (context.getType() === 'http') {
+    Logger.log('http get type', 'current user decorator');
+    return context.switchToHttp().getRequest().user;
+  } else if (context.getType() === 'ws') {
+    Logger.log('ws get type', 'current user decorator');
+    return context.switchToWs().getClient().handshake.user;
+  }
 };
 
 export const CurrentUser = createParamDecorator(

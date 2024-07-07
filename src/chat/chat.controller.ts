@@ -10,7 +10,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { Chat } from './entity/chat.entity';
+import { Chat } from '../../libs/common/src/entities/chat.entity';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 

@@ -1,4 +1,6 @@
 import {
+  HttpException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -7,7 +9,7 @@ import {
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Message } from './entity/message.entity';
+import { Message } from '../../../libs/common/src/entities/message.entity';
 import { Repository } from 'typeorm';
 import { CHAT_ERROR_MESSAGES } from '@app/common';
 
@@ -18,7 +20,7 @@ export class MessageService {
     private messageRepository: Repository<Message>,
   ) {}
 
-  async createTranscript(message: CreateMessageDto) {
+  async createMessage(message: CreateMessageDto) {
     try {
       const newMessage = this.messageRepository.create({
         ...message,
@@ -30,16 +32,14 @@ export class MessageService {
       return newMessage;
     } catch (e) {
       Logger.error('Error creating transcript', e);
-      if (e instanceof NotFoundException) {
-        throw e;
-      }
-      throw new InternalServerErrorException(
-        CHAT_ERROR_MESSAGES.CREATE_TRANSCRIPT_ERROR,
+      throw new HttpException(
+        e.message || CHAT_ERROR_MESSAGES.CREATE_TRANSCRIPT_ERROR,
+        e.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async updateTranscript(id: number, transcript: UpdateMessageDto) {
+  async updateMessage(id: number, transcript: UpdateMessageDto) {
     try {
       await this.messageRepository.update(id, transcript);
     } catch (e) {
@@ -50,9 +50,9 @@ export class MessageService {
     }
   }
 
-  async deleteTranscript(transcriptId: number) {
+  async deleteMessage(transcriptId: number) {
     try {
-      await this.messageRepository.delete({ transcriptId: transcriptId });
+      await this.messageRepository.delete({ messageId: transcriptId });
     } catch (e) {
       Logger.error('Error deleting transcript', e);
       throw new InternalServerErrorException(

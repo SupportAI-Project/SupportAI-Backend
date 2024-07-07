@@ -18,7 +18,7 @@ export class MessageController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async uploadTranscript(@Body() message: CreateMessageDto) {
-    return await this.transcriptService.createTranscript(message);
+    return await this.transcriptService.createMessage(message);
   }
 
   @Post(':id')
@@ -27,12 +27,12 @@ export class MessageController {
     @Body() transcript: UpdateMessageDto,
     @Param('id') transcriptId: number,
   ) {
-    await this.transcriptService.updateTranscript(transcriptId, transcript);
+    await this.transcriptService.updateMessage(transcriptId, transcript);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   async deleteTranscript(@Param('id') id: number) {
-    await this.transcriptService.deleteTranscript(id);
+    await this.transcriptService.deleteMessage(id);
   }
 }

@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Chat } from './entity/chat.entity';
+import { Chat } from '../../libs/common/src/entities/chat.entity';
 import { Repository } from 'typeorm';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
@@ -24,8 +24,6 @@ export class ChatService {
         ...chat,
         startTime: new Date(),
         isOpen: true,
-        messages: [],
-        endTime: null,
       });
 
       await this.chatRepository.save(newChat);

@@ -1,14 +1,14 @@
 import { IsBoolean, IsDate, IsNumber } from 'class-validator';
-import { Message } from '../message/entity/message.entity';
 import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '@app/common';
+import { User } from './user.entity';
+import { Message } from './message.entity';
 @Entity('Chat')
 export class Chat {
   @PrimaryGeneratedColumn()
@@ -29,10 +29,10 @@ export class Chat {
   @IsBoolean()
   isOpen: boolean;
 
-  @OneToMany(() => Message, (transcript) => transcript.chat)
+  @OneToMany(() => Message, (message) => message.chat)
   messages: Message[];
 
-  @OneToOne(() => User, (user) => user.chat)
-  @JoinColumn({ name: 'customerId' })
+  @ManyToOne(() => User, (user) => user.chats)
+  @JoinColumn({ name: 'customerId', referencedColumnName: 'userId' })
   customer: User;
 }
