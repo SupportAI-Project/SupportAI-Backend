@@ -3,13 +3,20 @@ import { AppModule } from './app/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { config } from '@app/common';
 import { ConfigService } from '@nestjs/config';
+import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
+
+import * as cookieParser from 'cookie-parser';
+
 const configService = new ConfigService();
 
 import * as passport from 'passport';
 import * as session from 'express-session';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  app.useLogger(app.get(Logger));
+  app.useGlobalInterceptors(new LoggerErrorInterceptor());
+
   app.enableCors({
     origin: config.FRONTEND_URL,
   });
@@ -23,13 +30,14 @@ async function bootstrap() {
 
   app.use(
     session({
-      secret: configService.get('JWT_SECRET'),
+      secret: configService.get('SESSION_SECRET'),
       resave: false,
       saveUninitialized: false,
     }),
   );
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(cookieParser());
   await app.listen(3000);
 }
 bootstrap();

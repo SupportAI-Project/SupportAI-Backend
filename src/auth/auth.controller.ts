@@ -3,18 +3,21 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
-  Logger,
   Post,
   Res,
   UseGuards,
+  Logger,
+  HttpException,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
-import { CreateUserDto } from './user/dto/create-user.dto';
-import { User } from './user/entity/user.model';
 import { Response } from 'express';
+import { AuthService } from './auth.service';
+import { User } from '@app/common';
+import { CreateUserDto } from './user/dto/create-user.dto';
+import { TWO_HOURS_FROM_NOW_DATE } from '@app/common';
+import { JwtAuthGuard } from '@app/common';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { CurrentUser } from '@app/common';
+import { Public } from '@app/common';
 
 @Controller('auth')
 export class AuthController {
@@ -23,26 +26,38 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('login')
+  @Public()
   async login(
-    @Body() loginDto: LoginDto,
+    @CurrentUser() user: User,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const jwtToken = await this.authService.login(loginDto, response);
-    response.send(jwtToken);
+    const { access_token } = await this.authService.login(user);
+    response.cookie('Authorization', access_token, {
+      httpOnly: true,
+      expires: TWO_HOURS_FROM_NOW_DATE,
+    });
+    return { message: 'Login successful' };
   }
 
-  @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.CREATED)
   @Post('register')
-  register(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.authService.register(createUserDto);
+  @Public()
+  async register(@Body() createUserDto: CreateUserDto): Promise<User> {
+    try {
+      return await this.authService.register(createUserDto);
+    } catch (e) {
+      Logger.error('register function error', e.message);
+      throw new HttpException(
+        e.message || 'An error occurred while registering user',
+        e.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('logout')
   async logout(@Res({ passthrough: true }) response: Response) {
-    Logger.log('User logged out', 'AuthController');
     await this.authService.logout(response);
   }
 }

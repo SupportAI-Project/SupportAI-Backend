@@ -17,7 +17,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "run:migration": "npx typeorm migration:run"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -29,17 +30,20 @@
 <<<<<<< HEAD
 =======
     "@nestjs/typeorm": "^10.0.2",
-    "@types/passport-local": "^1.0.38",
     "bcryptjs": "^2.4.3",
 >>>>>>> d2bbd030c80995cc4b48cc9ddd29d4b507dfbc0d
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "cookie-parser": "^1.4.6",
     "express-session": "^1.18.0",
     "joi": "^17.13.1",
+    "nestjs-pino": "^4.1.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pg": "^8.11.5",
+    "pino-http": "^10.2.0",
+    "pino-pretty": "^11.2.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20"
@@ -59,6 +63,7 @@
     "@types/jest": "^29.5.2",
     "@types/node": "^20.3.1",
     "@types/passport-jwt": "^4.0.1",
+    "@types/passport-local": "^1.0.38",
     "@types/supertest": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
