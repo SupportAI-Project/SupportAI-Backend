@@ -4,13 +4,12 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
-  NotFoundException,
 } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Message } from '../../../libs/common/src/entities/message.entity';
 import { Repository } from 'typeorm';
+import { Message } from '@app/common';
 import { CHAT_ERROR_MESSAGES } from '@app/common';
 
 @Injectable()
