@@ -27,11 +27,8 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.0",
-<<<<<<< HEAD
-=======
     "@nestjs/typeorm": "^10.0.2",
     "bcryptjs": "^2.4.3",
->>>>>>> d2bbd030c80995cc4b48cc9ddd29d4b507dfbc0d
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "cookie-parser": "^1.4.6",
@@ -53,11 +50,8 @@
     "@nestjs/config": "^3.2.2",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
-<<<<<<< HEAD
     "@nestjs/typeorm": "^10.0.2",
-=======
     "@types/bcryptjs": "^2.4.6",
->>>>>>> d2bbd030c80995cc4b48cc9ddd29d4b507dfbc0d
     "@types/express": "^4.17.17",
     "@types/express-session": "^1.18.0",
     "@types/jest": "^29.5.2",
