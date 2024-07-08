@@ -56,3 +56,4 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 .github/workflows/pr_workflows/
+.github/PR_DESCRIPTION.md
