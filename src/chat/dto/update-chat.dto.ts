@@ -31,5 +31,5 @@ export class UpdateChatDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => Message)
-  transcripts?: Message[];
+  messages?: Message[];
 }

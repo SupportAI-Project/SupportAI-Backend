@@ -11,28 +11,28 @@ import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 
-@Controller('transcripts')
+@Controller('messages')
 export class MessageController {
-  constructor(private readonly transcriptService: MessageService) {}
+  constructor(private readonly messageService: MessageService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async uploadTranscript(@Body() message: CreateMessageDto) {
-    return await this.transcriptService.createMessage(message);
+  async uploadMessage(@Body() message: CreateMessageDto) {
+    return await this.messageService.createMessage(message);
   }
 
   @Post(':id')
   @HttpCode(HttpStatus.OK)
-  async updateTranscript(
-    @Body() transcript: UpdateMessageDto,
-    @Param('id') transcriptId: number,
+  async updateMessage(
+    @Body() message: UpdateMessageDto,
+    @Param('id') messageId: number,
   ) {
-    await this.transcriptService.updateMessage(transcriptId, transcript);
+    await this.messageService.updateMessage(messageId, message);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  async deleteTranscript(@Param('id') id: number) {
-    await this.transcriptService.deleteMessage(id);
+  async deleteMessage(@Param('id') id: number) {
+    await this.messageService.deleteMessage(id);
   }
 }
