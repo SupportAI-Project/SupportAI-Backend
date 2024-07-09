@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('Transcript')
+@Entity('Message')
 export class Message {
   @PrimaryGeneratedColumn()
   messageId: number;

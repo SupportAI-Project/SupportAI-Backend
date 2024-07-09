@@ -26,36 +26,34 @@ export class MessageService {
         timeStamp: new Date(),
       });
 
-      await this.messageRepository.save(newMessage);
-
-      return newMessage;
+      return await this.messageRepository.save(newMessage);
     } catch (e) {
-      Logger.error('Error creating transcript', e);
+      Logger.error('Error creating message', e);
       throw new HttpException(
-        e.message || CHAT_ERROR_MESSAGES.CREATE_TRANSCRIPT_ERROR,
+        e.message || CHAT_ERROR_MESSAGES.CREATE_MESSAGE_ERROR,
         e.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async updateMessage(id: number, transcript: UpdateMessageDto) {
+  async updateMessage(id: number, message: UpdateMessageDto) {
     try {
-      await this.messageRepository.update(id, transcript);
+      await this.messageRepository.update(id, message);
     } catch (e) {
-      Logger.error('Error updating transcript', e);
+      Logger.error('Error updating message', e);
       throw new InternalServerErrorException(
-        CHAT_ERROR_MESSAGES.UPDATE_TRANSCRIPT_ERROR,
+        CHAT_ERROR_MESSAGES.UPDATE_MESSAGE_ERROR,
       );
     }
   }
 
-  async deleteMessage(transcriptId: number) {
+  async deleteMessage(messageId: number) {
     try {
-      await this.messageRepository.delete({ messageId: transcriptId });
+      await this.messageRepository.delete({ messageId: messageId });
     } catch (e) {
-      Logger.error('Error deleting transcript', e);
+      Logger.error('Error deleting message', e);
       throw new InternalServerErrorException(
-        CHAT_ERROR_MESSAGES.DELETE_TRANSCRIPT_ERROR,
+        CHAT_ERROR_MESSAGES.DELETE_MESSAGE_ERROR,
       );
     }
   }
