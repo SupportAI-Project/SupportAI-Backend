@@ -7,10 +7,9 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
-import { Logger, UseGuards } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { createChatServerDto } from './message/dto/create-chatserver.dto';
 import { SendMessageDto } from './message/dto/send-message.dto';
-import { JwtAuthGuard } from '@app/common';
 
 @WebSocketGateway({ namespace: 'chat' })
 export class ChatGateway {

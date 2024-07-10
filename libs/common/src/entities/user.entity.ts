@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  BaseEntity,
-  OneToMany,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
 import {
   IsNotEmpty,
   IsString,
@@ -12,7 +6,6 @@ import {
   IsArray,
   IsOptional,
 } from 'class-validator';
-import { Chat } from './chat.entity';
 import { Role } from '../types';
 
 @Entity('User')
@@ -38,8 +31,4 @@ export class User extends BaseEntity {
   @IsArray()
   @IsOptional()
   roles?: Role[];
-
-  @OneToMany(() => Chat, (chat) => chat.customer)
-  @IsOptional()
-  chats?: Chat[];
 }

@@ -11,16 +11,13 @@ const configService = new ConfigService();
 
 import * as passport from 'passport';
 import * as session from 'express-session';
-import { JwtService } from '@nestjs/jwt';
-import { WsAuthAdapter } from './adapters/ws-auth.adapter';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
-  const jwtService = app.get(JwtService);
-  app.useWebSocketAdapter(new WsAuthAdapter(app, jwtService, configService));
-
+  app.useWebSocketAdapter(new IoAdapter(app));
   app.enableCors({
     origin: config.FRONTEND_URL,
   });

@@ -1,13 +1,5 @@
 import { IsBoolean, IsDate, IsNumber } from 'class-validator';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { User } from './user.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Message } from './message.entity';
 @Entity('Chat')
 export class Chat {
@@ -31,8 +23,4 @@ export class Chat {
 
   @OneToMany(() => Message, (message) => message.chat)
   messages: Message[];
-
-  @ManyToOne(() => User, (user) => user.chats)
-  @JoinColumn({ name: 'customerId', referencedColumnName: 'userId' })
-  customer: User;
 }
