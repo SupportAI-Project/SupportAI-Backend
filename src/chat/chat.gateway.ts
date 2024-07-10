@@ -54,13 +54,14 @@ export class ChatGateway {
   }
 
   @SubscribeMessage('test')
-  async handleTest(@ConnectedSocket() client: Socket) {
-    Logger.log(`client is : ${JSON.stringify(client.handshake.headers)}`);
-    client.emit('test', 'test');
+  async handleTest(@ConnectedSocket() client) {
+    Logger.log(`client is : ${JSON.stringify(client.handshake)}`);
+    client.emit('test', 'testing');
   }
 
   handleConnection(client: Socket) {
     Logger.log('Client connected:', client.id);
+    client.emit('connected', client.id);
   }
 
   handleDisconnect(client: Socket) {
