@@ -18,13 +18,13 @@ export class ChatGateway {
 
   constructor(private readonly chatService: ChatService) {}
 
-  @SubscribeMessage('createChat')
+  @SubscribeMessage('create')
   async handleCreateChat(
     @ConnectedSocket() client: Socket,
     @MessageBody() data: createChatServerDto,
   ) {
     Logger.log('Received createChat event with user: ' + data);
-    const customerId = data.data.customerId;
+    const customerId = client.id;
     Logger.log('Received createChat event with customerId: ' + customerId);
     if (!customerId) {
       Logger.error('No customerId provided ' + customerId);
@@ -36,7 +36,7 @@ export class ChatGateway {
     client.emit('chatCreated', chat);
   }
 
-  @SubscribeMessage('sendMessage')
+  @SubscribeMessage('message')
   async handleSendMessage(
     @ConnectedSocket() client: Socket,
     @MessageBody()

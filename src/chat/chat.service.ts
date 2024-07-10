@@ -68,6 +68,7 @@ export class ChatService {
       );
     }
   }
+
   async deleteChat(chatId: number) {
     try {
       await this.chatRepository.delete({ chatId });

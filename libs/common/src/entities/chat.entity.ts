@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsNumber } from 'class-validator';
+import { IsBoolean, IsDate, IsString } from 'class-validator';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Message } from './message.entity';
 @Entity('Chat')
@@ -7,8 +7,8 @@ export class Chat {
   chatId: number;
 
   @Column()
-  @IsNumber()
-  customerId: number;
+  @IsString()
+  customerId: string;
 
   @Column()
   @IsDate()
