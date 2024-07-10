@@ -55,12 +55,19 @@ export class UserService {
     }
   }
 
-  async verifyUser(email: string, password: string) {
+  async verifyUser(username: string, password: string) {
     try {
-      const user = await this.getUser(email);
+      const user = await this.getUser(username);
+      if (!user) {
+        throw new UnauthorizedException(
+          CHAT_ERROR_MESSAGES.INVALID_CREDENTIALS,
+        );
+      }
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        throw new UnauthorizedException(CHAT_ERROR_MESSAGES.INVALID_CREDENTIALS);
+        throw new UnauthorizedException(
+          CHAT_ERROR_MESSAGES.INVALID_CREDENTIALS,
+        );
       }
       return user;
     } catch (error) {
