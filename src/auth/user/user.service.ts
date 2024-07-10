@@ -4,16 +4,16 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from '@app/common';
+import { User, USER_ERROR_MESSAGES } from '@app/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { SALT_ROUNDS } from '@app/common';
 import { Role } from '@app/common';
-import { CHAT_ERROR_MESSAGES } from '@app/common';
 
 @Injectable()
 export class UserService {
@@ -35,12 +35,12 @@ export class UserService {
       });
       if (!newUser) {
         Logger.error('Error creating user');
-        throw new InternalServerErrorException(CHAT_ERROR_MESSAGES.CREATE_USER);
+        throw new InternalServerErrorException(USER_ERROR_MESSAGES.CREATE_USER);
       }
       await this.userRepository.save(newUser);
       return newUser;
     } catch (error) {
-      throw new InternalServerErrorException(CHAT_ERROR_MESSAGES.CREATE_USER);
+      throw new InternalServerErrorException(USER_ERROR_MESSAGES.CREATE_USER);
     }
   }
 
@@ -60,20 +60,20 @@ export class UserService {
       const user = await this.getUser(username);
       if (!user) {
         throw new UnauthorizedException(
-          CHAT_ERROR_MESSAGES.INVALID_CREDENTIALS,
+          USER_ERROR_MESSAGES.INVALID_CREDENTIALS,
         );
       }
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         throw new UnauthorizedException(
-          CHAT_ERROR_MESSAGES.INVALID_CREDENTIALS,
+          USER_ERROR_MESSAGES.INVALID_CREDENTIALS,
         );
       }
       return user;
     } catch (error) {
       Logger.error('Error verifying user', error);
       throw new HttpException(
-        error.message || CHAT_ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        error.message || USER_ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
         error.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -91,7 +91,26 @@ export class UserService {
     } catch (error) {
       Logger.error('Error checking if user exists', error);
       throw new HttpException(
-        error.message || CHAT_ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        error.message || USER_ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        error.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async deleteUser(userId: number): Promise<boolean> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { userId: userId },
+      });
+      if (!user) {
+        throw new NotFoundException(USER_ERROR_MESSAGES.USER_NOT_FOUND);
+      }
+      await this.userRepository.remove(user);
+      return true;
+    } catch (error) {
+      Logger.error('Error deleting user', error);
+      throw new HttpException(
+        error.message || USER_ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
         error.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
