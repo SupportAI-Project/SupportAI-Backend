@@ -6,9 +6,17 @@ import { ChatGateway } from './chat.gateway';
 import { Chat } from '@app/common';
 import { MessageModule } from './message/message.module';
 import { UserModule } from 'src/auth/user/user.module';
+import { AuthModule } from 'src/auth/auth.module';
+import { AuthService } from 'src/auth/auth.service';
+import { JwtService } from '@nestjs/jwt';
 @Module({
-  imports: [TypeOrmModule.forFeature([Chat]), MessageModule, UserModule],
-  providers: [ChatService, ChatGateway],
+  imports: [
+    TypeOrmModule.forFeature([Chat]),
+    MessageModule,
+    UserModule,
+    AuthModule,
+  ],
+  providers: [ChatService, ChatGateway, AuthService, JwtService],
   controllers: [ChatController],
   exports: [ChatService],
 })

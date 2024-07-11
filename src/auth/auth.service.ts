@@ -78,4 +78,18 @@ export class AuthService {
       );
     }
   }
+
+  async extractUserFromToken(token: string): Promise<User> {
+    try {
+      const decodedToken = this.jwtService.decode(token) as TokenPayload;
+      const user = await this.userService.getUser(decodedToken.username);
+      return user;
+    } catch (error) {
+      Logger.error('Error decoding token', error);
+      throw new HttpException(
+        error.message || USER_ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        error.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

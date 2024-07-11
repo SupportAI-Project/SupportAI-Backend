@@ -7,10 +7,12 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
-import { Logger } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { createChatServerDto } from './message/dto/create-chatserver.dto';
 import { SendMessageDto } from './message/dto/send-message.dto';
+import { WsAuthGuard } from '@app/common/guards/ws-auth.guard';
 
+@UseGuards(WsAuthGuard)
 @WebSocketGateway({ namespace: 'chat' })
 export class ChatGateway {
   @WebSocketServer()
@@ -54,8 +56,8 @@ export class ChatGateway {
   }
 
   @SubscribeMessage('test')
-  async handleTest(@ConnectedSocket() client) {
-    Logger.log(`client is : ${JSON.stringify(client.handshake)}`);
+  async handleTest(@ConnectedSocket() client: Socket) {
+    Logger.log(`auth token is: ${client.handshake.headers.authorization}`);
     client.emit('test', 'testing');
   }
 
