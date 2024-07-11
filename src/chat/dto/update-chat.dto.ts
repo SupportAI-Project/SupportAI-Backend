@@ -21,7 +21,7 @@ export class UpdateChatDto {
   endTime?: Date;
 
   @IsString()
-  customerId: string;
+  customerId: number;
 
   @IsOptional()
   @IsBoolean()
