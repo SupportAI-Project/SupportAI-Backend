@@ -45,38 +45,22 @@ export class UserService {
   }
 
   async getUser(userIdentifier: string): Promise<User> {
-    try {
-      const user: User = await this.userRepository.findOne({
-        where: [{ username: userIdentifier }, { email: userIdentifier }],
-      });
-      return user;
-    } catch (error) {
-      Logger.error('Error getting user', error);
-    }
+    const user: User = await this.userRepository.findOne({
+      where: [{ username: userIdentifier }, { email: userIdentifier }],
+    });
+    return user;
   }
 
   async verifyUser(username: string, password: string) {
-    try {
-      const user = await this.getUser(username);
-      if (!user) {
-        throw new UnauthorizedException(
-          USER_ERROR_MESSAGES.INVALID_CREDENTIALS,
-        );
-      }
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) {
-        throw new UnauthorizedException(
-          USER_ERROR_MESSAGES.INVALID_CREDENTIALS,
-        );
-      }
-      return user;
-    } catch (error) {
-      Logger.error('Error verifying user', error);
-      throw new HttpException(
-        error.message || USER_ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
-        error.status || HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+    const user = await this.getUser(username);
+    if (!user) {
+      throw new UnauthorizedException(USER_ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException(USER_ERROR_MESSAGES.INVALID_CREDENTIALS);
+    }
+    return user;
   }
 
   async validateCreateUserDto(
