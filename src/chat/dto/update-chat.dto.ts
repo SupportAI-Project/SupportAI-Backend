@@ -2,8 +2,8 @@ import {
   IsArray,
   IsBoolean,
   IsDate,
+  IsNumber,
   IsOptional,
-  IsString,
   ValidateNested,
 } from 'class-validator';
 import { Message } from '../../../libs/common/src/entities/message.entity';
@@ -20,7 +20,7 @@ export class UpdateChatDto {
   @Type(() => Date)
   endTime?: Date;
 
-  @IsString()
+  @IsNumber()
   customerId: number;
 
   @IsOptional()

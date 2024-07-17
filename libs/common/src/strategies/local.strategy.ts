@@ -8,6 +8,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from '../../../../src/auth/user/user.service';
+import { User } from '../entities';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -15,7 +16,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     super();
   }
 
-  async validate(username: string, password: string): Promise<any> {
+  async validate(username: string, password: string): Promise<User | null> {
     if (!username || !password) {
       Logger.error('Invalid credentials', 'LocalStrategy');
       Logger.error('username: ' + username, 'LocalStrategy');
@@ -24,7 +25,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     }
     const user = await this.userService.verifyUser(username, password);
     if (!user) {
-      Logger.error('no user found', 'LocalStrategy');
       throw new UnauthorizedException();
     }
     return user;

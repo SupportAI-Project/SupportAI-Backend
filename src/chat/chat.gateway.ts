@@ -8,7 +8,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { Logger, UseGuards } from '@nestjs/common';
-import { createChatServerDto } from './message/dto/create-chatserver.dto';
+import { CreateChatServerDto } from './message/dto/CreateChatServer.dto';
 import { SendMessageDto } from './message/dto/send-message.dto';
 import { WsAuthGuard } from '@app/common/guards/ws-auth.guard';
 import { User } from '@app/common';
@@ -20,7 +20,7 @@ export class ChatGateway {
   @WebSocketServer()
   server: Server;
 
-  user: User | null | undefined;
+  user?: User;
 
   constructor(
     private readonly chatService: ChatService,
@@ -30,20 +30,16 @@ export class ChatGateway {
   @SubscribeMessage('create')
   async handleCreateChat(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: createChatServerDto,
+    @MessageBody() data: CreateChatServerDto,
   ) {
     const auth_token = client.handshake.headers.authorization;
-    Logger.log('Received createChat event with user: ' + data);
-    Logger.log(`auth token is: ${auth_token}`, 'ChatGateway');
     const { userId } = await this.authService.extractUserFromToken(auth_token);
-    Logger.log('Received createChat event with customerId: ' + userId);
     if (!userId) {
-      Logger.error('No customerId provided ' + userId);
+      Logger.error('No customerId provided ' + userId, 'ChatGateway');
     }
     const chat = await this.chatService.createChat({
       customerId: userId,
     });
-    Logger.log('Chat created:', chat);
     client.emit('chatCreated', chat);
   }
 

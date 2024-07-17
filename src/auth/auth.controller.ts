@@ -34,7 +34,7 @@ export class AuthController {
       httpOnly: true,
       expires: TWO_HOURS_FROM_NOW_DATE,
     });
-    return { message: 'Login successful', access_token: access_token };
+    return { message: 'Login successful' };
   }
 
   @HttpCode(HttpStatus.CREATED)

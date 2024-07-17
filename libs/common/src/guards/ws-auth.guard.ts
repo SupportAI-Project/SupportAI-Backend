@@ -18,13 +18,14 @@ export class WsAuthGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const { authorization } = context.getArgs()[0].handshake.headers;
-    Logger.log('authorization: ' + authorization, 'WsAuthGuard');
 
     if (!authorization) {
+      Logger.error('No authorization header found', 'WsAuthGuard');
       return false;
     }
     const user = this.authService.extractUserFromToken(authorization);
     if (!user) {
+      Logger.error('No user found in token', 'WsAuthGuard');
       return false;
     }
     return true;
