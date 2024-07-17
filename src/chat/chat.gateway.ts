@@ -60,12 +60,6 @@ export class ChatGateway {
     this.server.to(`chat_${data.data.chatId}`).emit('newMessage', message);
   }
 
-  @SubscribeMessage('test')
-  async handleTest(@ConnectedSocket() client: Socket) {
-    Logger.log(`auth token is: ${client.handshake.headers.authorization}`);
-    client.emit('test', 'testing');
-  }
-
   handleConnection(client: Socket) {
     Logger.log('Client connected:', client.id);
     client.emit('connected', client.id);
