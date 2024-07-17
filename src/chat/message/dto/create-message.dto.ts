@@ -9,7 +9,7 @@ export class CreateMessageDto {
   content: string;
 
   @IsBoolean()
-  isNote: boolean;
+  isNote?: boolean;
 
   @IsNotEmpty()
   chatId: number;

@@ -8,7 +8,6 @@ import {
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { Logger, UseGuards } from '@nestjs/common';
-import { CreateChatServerDto } from './message/dto/CreateChatServer.dto';
 import { SendMessageDto } from './message/dto/send-message.dto';
 import { WsAuthGuard } from '@app/common/guards/ws-auth.guard';
 import { User } from '@app/common';
@@ -28,10 +27,7 @@ export class ChatGateway {
   ) {}
 
   @SubscribeMessage('create')
-  async handleCreateChat(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() data: CreateChatServerDto,
-  ) {
+  async handleCreateChat(@ConnectedSocket() client: Socket) {
     const auth_token = client.handshake.headers.authorization;
     const { userId } = await this.authService.extractUserFromToken(auth_token);
     if (!userId) {
@@ -49,13 +45,13 @@ export class ChatGateway {
     @MessageBody()
     data: SendMessageDto,
   ) {
-    const isSupportSender = false;
+    const isSupportSender = data.isSupportSender || false;
     Logger.log('Received sendMessage event with data:', data);
-    const message = await this.chatService.sendMessage(
-      data.data.chatId,
-      data.data.content,
-      isSupportSender,
-    );
+    const message = await this.chatService.sendMessage({
+      chatId: data.data.chatId,
+      content: data.data.content,
+      isSupportSender: isSupportSender,
+    });
     Logger.log('Message sent:', message);
     this.server.to(`chat_${data.data.chatId}`).emit('newMessage', message);
   }

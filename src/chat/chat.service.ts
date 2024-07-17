@@ -13,6 +13,7 @@ import { CHAT_ERROR_MESSAGES } from '@app/common';
 import { Message } from '@app/common';
 import { MessageService } from './message/message.service';
 import { UserService } from 'src/auth/user/user.service';
+import { CreateMessageDto } from './message/dto/create-message.dto';
 
 @Injectable()
 export class ChatService {
@@ -41,18 +42,12 @@ export class ChatService {
     }
   }
 
-  async sendMessage(
-    chatId: number,
-    content: string,
-    isSupportSender: boolean,
-  ): Promise<Message> {
+  async sendMessage(createMessageDto: CreateMessageDto): Promise<Message> {
     const message = await this.messageService.createMessage({
-      isSupportSender,
-      content,
-      isNote: false,
-      chatId,
+      ...createMessageDto,
+      isNote: createMessageDto.isNote || false,
     });
-    const chat = await this.getChat(chatId);
+    const chat = await this.getChat(createMessageDto.chatId);
     chat.messages.push(message);
     await this.chatRepository.save(chat);
     return message;

@@ -4,4 +4,5 @@ export class SendMessageDto {
     chatId: number;
     content: string;
   };
+  isSupportSender?: boolean;
 }
