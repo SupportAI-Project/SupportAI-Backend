@@ -15,7 +15,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   entities: [User, Chat, Message],
   migrations: ['src/migration/**/*.ts'],
-  synchronize: false,
+  synchronize: process.env.SYNCHRONIZE === 'true',
   logging: true,
   ssl: {
     rejectUnauthorized: false,
