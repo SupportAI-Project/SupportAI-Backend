@@ -1,8 +1,8 @@
 import { DataSource } from 'typeorm';
 import { User } from '../libs/common/src/entities/user.entity';
-import { Chat } from '../libs/common/src/entities/chat.entity';
+import { Chat } from './entities/chat.entity';
 import { config } from 'dotenv';
-import { Message } from '../libs/common/src/entities/message.entity';
+import { Message } from './entities/message.entity';
 
 config();
 
