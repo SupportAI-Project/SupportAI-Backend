@@ -10,16 +10,14 @@ import { ChatService } from './chat.service';
 import { Logger, UseGuards } from '@nestjs/common';
 import { SendMessageDto } from './message/dto/send-message.dto';
 import { WsAuthGuard } from '@app/common/guards/ws-auth.guard';
-import { User } from '@app/common';
 import { AuthService } from 'src/auth/auth.service';
+import { ChatRoomActionDto } from './message/dto/join-chat.dto';
 
 @UseGuards(WsAuthGuard)
 @WebSocketGateway({ namespace: 'chat' })
 export class ChatGateway {
   @WebSocketServer()
   server: Server;
-
-  user?: User;
 
   constructor(
     private readonly chatService: ChatService,
@@ -54,6 +52,32 @@ export class ChatGateway {
     });
     Logger.log('Message sent:', message);
     this.server.to(`chat_${data.data.chatId}`).emit('newMessage', message);
+  }
+
+  @SubscribeMessage('join')
+  async handleJoinChat(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: ChatRoomActionDto,
+  ) {
+    const chatId = data.chatId;
+    client.join(`chat_${chatId}`);
+    Logger.log(`Client ${client.id} joined chat_${chatId}`);
+    client.emit('joined', `chat_${chatId}`);
+  }
+
+  @SubscribeMessage('leave')
+  async handleLeaveChat(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: ChatRoomActionDto,
+  ) {
+    try {
+      const chatId = data.chatId;
+      client.leave(`chat_${chatId}`);
+      Logger.log(`Client ${client.id} left chat_${chatId}`);
+      client.emit('left', `chat_${chatId}`);
+    } catch (error) {
+      Logger.error('Error in handleLeaveChat:', error);
+    }
   }
 
   handleConnection(client: Socket) {
