@@ -11,9 +11,18 @@ const configService = new ConfigService();
 
 import * as passport from 'passport';
 import * as session from 'express-session';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('SupportAI')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, document);
+
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
@@ -38,6 +47,6 @@ async function bootstrap() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(cookieParser());
-  await app.listen(3000);
+  await app.listen(8080);
 }
 bootstrap();
