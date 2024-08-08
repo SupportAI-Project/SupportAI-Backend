@@ -25,7 +25,7 @@ export class AuthService {
 
   async login(user: User): Promise<{ access_token: string }> {
     const tokenPayload: TokenPayload = {
-      sub: user.id,
+      sub: user.userId,
       username: user.username,
       roles: user.roles,
     };
@@ -75,6 +75,20 @@ export class AuthService {
       throw new HttpException(
         USER_ERROR_MESSAGES.LOGOUT_FAILED,
         HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async extractUserFromToken(token: string): Promise<User> {
+    try {
+      const decodedToken = this.jwtService.decode(token) as TokenPayload;
+      const user = await this.userService.getUser(decodedToken.username);
+      return user;
+    } catch (error) {
+      Logger.error('Error decoding token', error);
+      throw new HttpException(
+        error.message || USER_ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        error.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }

@@ -4,8 +4,8 @@ import { AuthController } from './auth.controller';
 import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from '@app/common';
-import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy, WsAuthGuard } from '@app/common';
+import { LocalStrategy } from '@app/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 
@@ -31,6 +31,6 @@ import * as Joi from 'joi';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, LocalStrategy],
+  providers: [AuthService, JwtStrategy, LocalStrategy, WsAuthGuard],
 })
 export class AuthModule {}

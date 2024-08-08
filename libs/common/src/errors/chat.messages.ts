@@ -1,8 +1,8 @@
 export const CHAT_ERROR_MESSAGES = {
-  CREATE_TRANSCRIPT_ERROR: 'Error creating transcript',
-  UPDATE_TRANSCRIPT_ERROR: 'Error updating transcript',
-  GET_TRANSCRIPTS_ERROR: 'Error fetching transcripts',
-  DELETE_TRANSCRIPT_ERROR: 'Error deleting transcript',
+  CREATE_MESSAGE_ERROR: 'Error creating message',
+  UPDATE_MESSAGE_ERROR: 'Error updating message',
+  GET_MESSAGE_ERROR: 'Error fetching message',
+  DELETE_MESSAGE_ERROR: 'Error deleting message',
   CREATE_CHAT_ERROR: 'Error creating chat',
   UPDATE_CHAT_ERROR: 'Error updating chat',
   GET_CHATS_ERROR: 'Error fetching chats',
