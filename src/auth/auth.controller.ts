@@ -12,7 +12,7 @@ import { AuthService } from './auth.service';
 import { THREE_DAYS, User } from '@app/common';
 import { CreateUserDto } from './user/dto/create-user.dto';
 import { JwtAuthGuard } from '@app/common';
-import { LocalAuthGuard } from '../../libs/common/src/guards/local-auth.guard';
+import { LocalAuthGuard } from '@app/common';
 import { CurrentUser } from '@app/common';
 import { Public } from '@app/common';
 

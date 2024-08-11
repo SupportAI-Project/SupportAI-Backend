@@ -10,7 +10,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { Chat } from '../entities/chat.entity';
+import { Chat } from './entity/chat.entity';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 
@@ -18,28 +18,28 @@ import { UpdateChatDto } from './dto/update-chat.dto';
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
-  @Get(':id')
-  @HttpCode(HttpStatus.OK)
-  async getChat(@Param('id') chatId: number): Promise<Chat> {
-    return this.chatService.getChat(chatId);
-  }
-
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createChat(@Body() createChatDto: CreateChatDto) {
     return await this.chatService.createChat(createChatDto);
   }
 
-  @Delete(':id')
-  @HttpCode(HttpStatus.OK)
-  async deleteChat(@Param('id') chatId: number) {
-    await this.chatService.deleteChat(chatId);
-  }
-
   @Get()
   @HttpCode(HttpStatus.OK)
   async getAllChats(): Promise<Chat[]> {
     return this.chatService.getAllChats();
+  }
+
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  async getChat(@Param('id') chatId: number): Promise<Chat> {
+    return this.chatService.getChat(chatId);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.OK)
+  async deleteChat(@Param('id') chatId: number) {
+    await this.chatService.deleteChat(chatId);
   }
 
   @Patch(':id')

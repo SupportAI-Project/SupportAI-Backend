@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsNumber } from 'class-validator';
 import {
   Column,
   Entity,
@@ -6,15 +6,15 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Message } from './message.entity';
-import { User } from '../../libs/common/src/entities/user.entity';
+import { Message } from '../message/entity/message.entity';
+import { User } from '@app/common';
 @Entity('Chat')
 export class Chat {
   @PrimaryGeneratedColumn()
   chatId: number;
 
   @Column()
-  @IsString()
+  @IsNumber()
   customerId: number;
 
   @Column()

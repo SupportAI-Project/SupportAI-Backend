@@ -5,14 +5,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Chat } from '../entities/chat.entity';
+import { Chat } from './entity/chat.entity';
 import { Repository } from 'typeorm';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { CHAT_ERROR_MESSAGES } from '@app/common';
-import { Message } from '@app/common';
+import { Message } from './message/entity/message.entity';
 import { MessageService } from './message/message.service';
-import { UserService } from 'src/auth/user/user.service';
 import { CreateMessageDto } from './message/dto/create-message.dto';
 
 @Injectable()
@@ -20,12 +19,11 @@ export class ChatService {
   constructor(
     @InjectRepository(Chat) private chatRepository: Repository<Chat>,
     private readonly messageService: MessageService,
-    private readonly userService: UserService,
   ) {}
 
   async createChat(createChatDto: CreateChatDto) {
     try {
-      const newChat = await this.chatRepository.create({
+      const newChat = this.chatRepository.create({
         ...createChatDto,
         startTime: new Date(),
         endTime: null,
@@ -97,7 +95,7 @@ export class ChatService {
 
   async getAllChats(): Promise<Chat[]> {
     try {
-      return this.chatRepository.find({
+      return await this.chatRepository.find({
         relations: ['user'],
       });
     } catch (e) {
