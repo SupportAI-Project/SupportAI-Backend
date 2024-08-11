@@ -14,7 +14,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { ChatRoomActionDto } from './message/dto/join-chat.dto';
 
 @UseGuards(WsAuthGuard)
-@WebSocketGateway({ namespace: 'chat' })
+@WebSocketGateway({ namespace: '/chat' })
 export class ChatGateway {
   @WebSocketServer()
   server: Server;
@@ -49,6 +49,7 @@ export class ChatGateway {
       chatId: data.data.chatId,
       content: data.data.content,
       isSupportSender: isSupportSender,
+      isNote: data.isNote,
     });
     Logger.log('Message sent:', message);
     this.server.to(`chat_${data.data.chatId}`).emit('newMessage', message);
@@ -59,6 +60,8 @@ export class ChatGateway {
     @ConnectedSocket() client: Socket,
     @MessageBody() data: ChatRoomActionDto,
   ) {
+    console.log('data', data);
+
     const chatId = data.chatId;
     client.join(`chat_${chatId}`);
     Logger.log(`Client ${client.id} joined chat_${chatId}`);
