@@ -9,7 +9,7 @@ import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { Logger, UseGuards } from '@nestjs/common';
 import { SendMessageDto } from './message/dto/send-message.dto';
-import { WsAuthGuard } from '@app/common/guards/ws-auth.guard';
+import { WsAuthGuard } from '@app/common';
 import { AuthService } from 'src/auth/auth.service';
 import { ChatRoomActionDto } from './message/dto/join-chat.dto';
 
