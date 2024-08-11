@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsNumber } from 'class-validator';
 import {
   Column,
   Entity,
@@ -14,7 +14,7 @@ export class Chat {
   chatId: number;
 
   @Column()
-  @IsString()
+  @IsNumber()
   customerId: number;
 
   @Column()
