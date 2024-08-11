@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateGuideDto } from './dto/create-guide.dto';
 import { UpdateGuideDto } from './dto/update-guide.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,19 +19,23 @@ export class GuideService {
     return await this.guideRepository.save(newGuide);
   }
 
-  async findAll() {
-    return `This action returns all guide`;
+  async getAllGuides() {
+    return await this.guideRepository.find();
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} guide`;
+  async getGuide(guideId: number) {
+    const guide = await this.guideRepository.findOne({ where: { guideId } });
+    if (!guide) {
+      throw new NotFoundException(`Guide with ID ${guideId} not found`);
+    }
+    return guide;
   }
 
   async update(id: number, updateGuideDto: UpdateGuideDto) {
-    return `This action updates a #${id} guide`;
+    await this.guideRepository.update(id, updateGuideDto);
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} guide`;
+    await this.guideRepository.delete(id);
   }
 }

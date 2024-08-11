@@ -24,6 +24,12 @@ export class ChatController {
     return await this.chatService.createChat(createChatDto);
   }
 
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async getAllChats(): Promise<Chat[]> {
+    return this.chatService.getAllChats();
+  }
+
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getChat(@Param('id') chatId: number): Promise<Chat> {
@@ -34,12 +40,6 @@ export class ChatController {
   @HttpCode(HttpStatus.OK)
   async deleteChat(@Param('id') chatId: number) {
     await this.chatService.deleteChat(chatId);
-  }
-
-  @Get()
-  @HttpCode(HttpStatus.OK)
-  async getAllChats(): Promise<Chat[]> {
-    return this.chatService.getAllChats();
   }
 
   @Patch(':id')

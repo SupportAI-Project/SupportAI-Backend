@@ -24,13 +24,14 @@ export class GuideController {
   }
 
   @Get()
-  async findAll() {
-    return this.guideService.findAll();
+  @HttpCode(HttpStatus.OK)
+  async getAllGuides() {
+    return this.guideService.getAllGuides();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.guideService.findOne(+id);
+  async getGuide(@Param('id') id: string) {
+    return this.guideService.getGuide(+id);
   }
 
   @Patch(':id')
