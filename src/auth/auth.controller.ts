@@ -16,6 +16,7 @@ import { LocalAuthGuard } from '@app/common';
 import { CurrentUser } from '@app/common';
 import { Public } from '@app/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { LoginDto } from './dto/login.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -29,17 +30,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Log in a user' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Login successful' })
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
-  @ApiBody({
-    description: 'User login credentials',
-    schema: {
-      type: 'object',
-      properties: {
-        username: { type: 'string' },
-        password: { type: 'string' },
-      },
-      required: ['username', 'password'],
-    },
-  })
+  @ApiBody({ type: LoginDto })
   async login(
     @CurrentUser() user: User,
     @Res({ passthrough: true }) response: Response,
