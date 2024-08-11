@@ -9,9 +9,8 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
-import { User } from '@app/common';
+import { THREE_DAYS, User } from '@app/common';
 import { CreateUserDto } from './user/dto/create-user.dto';
-import { TWO_HOURS_FROM_NOW_DATE } from '@app/common';
 import { JwtAuthGuard } from '@app/common';
 import { LocalAuthGuard } from '../../libs/common/src/guards/local-auth.guard';
 import { CurrentUser } from '@app/common';
@@ -32,7 +31,7 @@ export class AuthController {
     const { access_token } = await this.authService.login(user);
     response.cookie('Authorization', access_token, {
       httpOnly: true,
-      expires: TWO_HOURS_FROM_NOW_DATE,
+      maxAge: THREE_DAYS,
     });
     return { message: 'Login successful' };
   }
