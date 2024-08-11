@@ -12,7 +12,7 @@ export class GuideService {
   ) {}
 
   async create(createGuideDto: CreateGuideDto) {
-    const newGuide = this.guideRepository.create({
+    const newGuide = await this.guideRepository.create({
       ...createGuideDto,
       createdAt: new Date(),
     });

@@ -11,6 +11,7 @@ import { ChatModule } from 'src/chat/chat.module';
 import { MessageModule } from 'src/chat/message/message.module';
 import { LoggerModule } from 'nestjs-pino';
 import { HttpExceptionFilter } from '@app/common';
+import { GuideModule } from 'src/guide/guide.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { HttpExceptionFilter } from '@app/common';
     AuthModule,
     ChatModule,
     MessageModule,
+    GuideModule,
   ],
   controllers: [AppController],
   providers: [

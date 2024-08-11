@@ -17,21 +17,21 @@ import { UpdateGuideDto } from './dto/update-guide.dto';
 export class GuideController {
   constructor(private readonly guideService: GuideService) {}
 
-  @Post()
   @HttpCode(HttpStatus.CREATED)
+  @Post()
   async create(@Body() createGuideDto: CreateGuideDto) {
-    return this.guideService.create(createGuideDto);
+    return await this.guideService.create(createGuideDto);
   }
 
-  @Get()
   @HttpCode(HttpStatus.OK)
+  @Get()
   async getAllGuides() {
-    return this.guideService.getAllGuides();
+    return await this.guideService.getAllGuides();
   }
 
   @Get(':id')
   async getGuide(@Param('id') id: string) {
-    return this.guideService.getGuide(+id);
+    return await this.guideService.getGuide(+id);
   }
 
   @Patch(':id')
@@ -39,11 +39,13 @@ export class GuideController {
     @Param('id') id: string,
     @Body() updateGuideDto: UpdateGuideDto,
   ) {
-    return this.guideService.update(+id, updateGuideDto);
+    await this.guideService.update(+id, updateGuideDto);
+    return { message: 'Guide updated successfully' };
   }
 
   @Delete(':id')
-  async emove(@Param('id') id: string) {
-    return this.guideService.remove(+id);
+  async remove(@Param('id') id: string) {
+    await this.guideService.remove(+id);
+    return { message: 'Guide deleted successfully' };
   }
 }
