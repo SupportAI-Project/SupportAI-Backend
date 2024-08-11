@@ -18,16 +18,16 @@ import { UpdateChatDto } from './dto/update-chat.dto';
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
-  @Get(':id')
-  @HttpCode(HttpStatus.OK)
-  async getChat(@Param('id') chatId: number): Promise<Chat> {
-    return this.chatService.getChat(chatId);
-  }
-
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createChat(@Body() createChatDto: CreateChatDto) {
     return await this.chatService.createChat(createChatDto);
+  }
+
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  async getChat(@Param('id') chatId: number): Promise<Chat> {
+    return this.chatService.getChat(chatId);
   }
 
   @Delete(':id')

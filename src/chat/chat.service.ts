@@ -12,7 +12,6 @@ import { UpdateChatDto } from './dto/update-chat.dto';
 import { CHAT_ERROR_MESSAGES } from '@app/common';
 import { Message } from './message/entity/message.entity';
 import { MessageService } from './message/message.service';
-import { UserService } from 'src/auth/user/user.service';
 import { CreateMessageDto } from './message/dto/create-message.dto';
 
 @Injectable()
@@ -20,12 +19,11 @@ export class ChatService {
   constructor(
     @InjectRepository(Chat) private chatRepository: Repository<Chat>,
     private readonly messageService: MessageService,
-    private readonly userService: UserService,
   ) {}
 
   async createChat(createChatDto: CreateChatDto) {
     try {
-      const newChat = await this.chatRepository.create({
+      const newChat = this.chatRepository.create({
         ...createChatDto,
         startTime: new Date(),
         endTime: null,
