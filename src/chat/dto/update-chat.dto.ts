@@ -6,7 +6,7 @@ import {
   IsOptional,
   ValidateNested,
 } from 'class-validator';
-import { Message } from '../../entities/message.entity';
+import { Message } from '../message/entity/message.entity';
 import { Type } from 'class-transformer';
 
 export class UpdateChatDto {
