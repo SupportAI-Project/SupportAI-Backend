@@ -20,6 +20,7 @@ async function bootstrap() {
   app.useWebSocketAdapter(new IoAdapter(app));
   app.enableCors({
     origin: config.FRONTEND_URL,
+    credentials: true,
   });
 
   app.useGlobalPipes(
@@ -39,6 +40,6 @@ async function bootstrap() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(cookieParser());
-  await app.listen(3000);
+  await app.listen(8080);
 }
 bootstrap();

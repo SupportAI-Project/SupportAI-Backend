@@ -5,4 +5,5 @@ export class SendMessageDto {
     content: string;
   };
   isSupportSender?: boolean;
+  isNote?: boolean;
 }

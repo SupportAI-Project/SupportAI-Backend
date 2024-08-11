@@ -7,6 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/auth/auth.service';
+import * as cookie from 'cookie';
 
 @Injectable()
 export class WsAuthGuard implements CanActivate {
@@ -17,7 +18,10 @@ export class WsAuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const { authorization } = context.getArgs()[0].handshake.headers;
+    const client = context.getArgs()[0];
+    const cookies = cookie.parse(client.handshake.headers.cookie || '');
+
+    const authorization = cookies['Authorization'];
 
     if (!authorization) {
       Logger.error('No authorization header found', 'WsAuthGuard');
