@@ -97,7 +97,9 @@ export class ChatService {
 
   async getAllChats(): Promise<Chat[]> {
     try {
-      return this.chatRepository.find();
+      return this.chatRepository.find({
+        relations: ['user'],
+      });
     } catch (e) {
       Logger.error('Error getting all chats', e);
       throw new InternalServerErrorException(
