@@ -11,10 +11,11 @@ export class GuideService {
     @InjectRepository(Guide) private guideRepository: Repository<Guide>,
   ) {}
 
-  async create(createGuideDto: CreateGuideDto) {
+  async create(createGuideDto: CreateGuideDto, userId: number) {
     const newGuide = await this.guideRepository.create({
       ...createGuideDto,
       createdAt: new Date(),
+      creatorId: userId,
     });
     return await this.guideRepository.save(newGuide);
   }

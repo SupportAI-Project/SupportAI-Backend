@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  HttpCode,
   HttpStatus,
 } from '@nestjs/common';
 import { GuideService } from './guide.service';
@@ -19,13 +18,13 @@ import {
   ApiBody,
   ApiParam,
 } from '@nestjs/swagger';
+import { CurrentUser, User } from '@app/common';
 
 @ApiTags('guides')
 @Controller('guides')
 export class GuideController {
   constructor(private readonly guideService: GuideService) {}
 
-  @HttpCode(HttpStatus.CREATED)
   @Post()
   @ApiOperation({ summary: 'Create a new guide' })
   @ApiResponse({
@@ -37,11 +36,13 @@ export class GuideController {
     description: 'Invalid input data',
   })
   @ApiBody({ type: CreateGuideDto })
-  async create(@Body() createGuideDto: CreateGuideDto) {
-    return await this.guideService.create(createGuideDto);
+  async create(
+    @Body() createGuideDto: CreateGuideDto,
+    @CurrentUser() user: User,
+  ) {
+    return await this.guideService.create(createGuideDto, user.userId);
   }
 
-  @HttpCode(HttpStatus.OK)
   @Get()
   @ApiOperation({ summary: 'Retrieve all guides' })
   @ApiResponse({ status: HttpStatus.OK, description: 'List of all guides' })

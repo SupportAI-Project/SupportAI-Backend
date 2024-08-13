@@ -1,5 +1,12 @@
 import { IsDate, IsNumber, IsString } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from '@app/common';
 
 @Entity('Guide')
 export class Guide {
@@ -21,4 +28,8 @@ export class Guide {
   @Column()
   @IsDate()
   createdAt: Date;
+
+  @ManyToOne(() => User, { createForeignKeyConstraints: false })
+  @JoinColumn({ name: 'creatorId' })
+  creator: User;
 }

@@ -1,14 +1,7 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateGuideDto {
-  @IsNumber()
-  @ApiProperty({
-    description: 'ID of the creator of the guide',
-    example: 123,
-  })
-  creatorId: number;
-
   @IsString()
   @ApiProperty({
     description: 'Title of the guide',
