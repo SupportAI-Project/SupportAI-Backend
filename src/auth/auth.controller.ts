@@ -15,7 +15,10 @@ import { JwtAuthGuard } from '@app/common';
 import { LocalAuthGuard } from '@app/common';
 import { CurrentUser } from '@app/common';
 import { Public } from '@app/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { LoginDto } from './dto/login.dto';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -24,6 +27,10 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   @Public()
+  @ApiOperation({ summary: 'Log in a user' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Login successful' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
+  @ApiBody({ type: LoginDto })
   async login(
     @CurrentUser() user: User,
     @Res({ passthrough: true }) response: Response,
@@ -39,6 +46,13 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @Post('register')
   @Public()
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'User created' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'An error occurred while registering user',
+  })
+  @ApiBody({ type: CreateUserDto })
   async register(@Body() createUserDto: CreateUserDto): Promise<User> {
     return await this.authService.register(createUserDto);
   }
@@ -46,7 +60,10 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('logout')
+  @ApiOperation({ summary: 'Log out the current user' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Logout successful' })
   async logout(@Res({ passthrough: true }) response: Response) {
     await this.authService.logout(response);
+    return { message: 'Logout successful' };
   }
 }
