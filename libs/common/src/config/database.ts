@@ -2,31 +2,34 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { z } from 'zod';
 
 const envVarsSchema = z.object({
-  PG_HOST: z.string(),
-  PG_USER: z.string(),
-  PG_PASSWORD: z.string(),
-  PG_DATABASE: z.string(),
+  POSTGRES_HOST: z.string(),
+  POSTGRES_USER: z.string(),
+  POSTGRES_PASSWORD: z.string(),
+  POSTGRES_DATABASE: z.string(),
   SYNCHRONIZE: z.string(),
+  SSL: z.string().optional().default('false'),
 });
 
 export const databaseConfig: () => TypeOrmModuleOptions = () => {
   const {
-    PG_HOST,
-    PG_USER,
-    PG_PASSWORD,
-    PG_DATABASE,
+    POSTGRES_HOST,
+    POSTGRES_USER,
+    POSTGRES_PASSWORD,
+    POSTGRES_DATABASE,
     SYNCHRONIZE: SYNC_STRING,
+    SSL: SSL_STRING,
   } = envVarsSchema.parse(process.env);
 
   const SYNCHRONIZE = SYNC_STRING.toLowerCase() === 'true';
+  const SSL = SSL_STRING.toLowerCase() === 'true';
 
   return {
     type: 'postgres',
-    host: PG_HOST,
-    username: PG_USER,
-    password: PG_PASSWORD,
-    database: PG_DATABASE,
-    ssl: true,
+    host: POSTGRES_HOST,
+    username: POSTGRES_USER,
+    password: POSTGRES_PASSWORD,
+    database: POSTGRES_DATABASE,
+    ssl: SSL,
     autoLoadEntities: true,
     synchronize: SYNCHRONIZE,
   };
