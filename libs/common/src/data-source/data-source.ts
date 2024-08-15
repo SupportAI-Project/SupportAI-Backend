@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const envVarsSchema = z.object({
-  POSTGRES_MIGRATIONS_HOST: z.string(),
+  POSTGRES_HOST: z.string(),
   POSTGRES_PORT: z.string(),
   POSTGRES_USER: z.string(),
   POSTGRES_PASSWORD: z.string(),
@@ -22,7 +22,7 @@ if (!parsedEnv.success) {
 }
 
 const {
-  POSTGRES_MIGRATIONS_HOST,
+  POSTGRES_HOST,
   POSTGRES_PORT,
   POSTGRES_USER,
   POSTGRES_PASSWORD,
@@ -36,7 +36,7 @@ const SSL = SSL_STRING.toLowerCase() === 'true';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: POSTGRES_MIGRATIONS_HOST,
+  host: POSTGRES_HOST,
   port: parseInt(POSTGRES_PORT, 10),
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
