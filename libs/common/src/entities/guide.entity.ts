@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '@app/common';
+import { User } from './user.entity';
 
 @Entity('Guide')
 export class Guide {
