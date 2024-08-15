@@ -40,7 +40,7 @@ export class AuthController {
       httpOnly: true,
       maxAge: THREE_DAYS,
     });
-    return { message: 'Login successful' };
+    return user;
   }
 
   @HttpCode(HttpStatus.CREATED)
