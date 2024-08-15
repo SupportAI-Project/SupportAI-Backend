@@ -5,12 +5,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Chat } from './entity/chat.entity';
+import { Chat } from '@app/common';
 import { Repository } from 'typeorm';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { CHAT_ERROR_MESSAGES } from '@app/common';
-import { Message } from './message/entity/message.entity';
+import { Message } from '@app/common';
 import { MessageService } from './message/message.service';
 import { CreateMessageDto } from './message/dto/create-message.dto';
 

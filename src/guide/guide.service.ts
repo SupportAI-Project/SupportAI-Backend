@@ -3,7 +3,7 @@ import { CreateGuideDto } from './dto/create-guide.dto';
 import { UpdateGuideDto } from './dto/update-guide.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Guide } from './entities/guide.entity';
+import { Guide } from '../../libs/common/src/entities/guide.entity';
 
 @Injectable()
 export class GuideService {
