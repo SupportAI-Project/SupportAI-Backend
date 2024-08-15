@@ -13,7 +13,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { Role } from '../types';
-import { Chat } from './chat.entity';
+import { Chat } from '../../../../src/chat/entities/chat.entity';
 
 @Entity('User')
 export class User extends BaseEntity {

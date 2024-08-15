@@ -43,6 +43,6 @@ export const AppDataSource = new DataSource({
   database: POSTGRES_DATABASE,
   ssl: SSL,
   synchronize: SYNCHRONIZE,
-  entities: [__dirname + '/../entities/*.entity{.ts,.js}'],
+  entities: [__dirname + '/../entity/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../migrations/*{.ts,.js}'],
 });
