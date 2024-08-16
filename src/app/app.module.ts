@@ -19,12 +19,47 @@ import { GuideModule } from 'src/guide/guide.module';
     TypeOrmModule.forRoot(databaseConfig()),
     LoggerModule.forRoot({
       pinoHttp: {
+        customLogLevel: (res, err) => {
+          if (res && res.statusCode >= 500) return 'error';
+          if (res && res.statusCode >= 400) return 'warn';
+          return 'info';
+        },
+        timestamp: () =>
+          `,"time":"${new Date().toLocaleString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: true,
+            timeZone: 'Asia/Jerusalem',
+          })}"`,
         transport: {
           target: 'pino-pretty',
           options: {
             singleLine: true,
             colorize: true,
+            levelFirst: true,
+            translateTime: false,
+            messageFormat: `[SupportAI] | {context} {req.method} {req.url} {res.statusCode} - {msg}`,
+            ignore: 'pid,hostname,res.headers',
+            customLevels: {
+              trace: 10,
+              debug: 20,
+              info: 30,
+              warn: 40,
+              error: 50,
+            },
+            level: 'trace',
           },
+        },
+        serializers: {
+          req: (req) => ({
+            method: req.method,
+            url: req.url,
+          }),
+          res: (res) => ({
+            statusCode: res.statusCode,
+            responseTime: res.responseTime,
+          }),
         },
       },
     }),
