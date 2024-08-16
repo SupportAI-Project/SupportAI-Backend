@@ -9,14 +9,10 @@ import * as session from 'express-session';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
-import { AppDataSource } from '@app/common';
 
 const configService = new ConfigService();
 
 async function bootstrap() {
-  await AppDataSource.initialize();
-  await AppDataSource.runMigrations();
-
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
   const swaggerConfig = new DocumentBuilder()

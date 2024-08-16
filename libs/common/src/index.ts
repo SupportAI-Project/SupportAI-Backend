@@ -7,4 +7,3 @@ export * from './entities';
 export * from './guards';
 export * from './strategies';
 export * from './filters';
-export * from './data-source';
