@@ -32,19 +32,14 @@ export class ReviewService {
         createdAt: new Date(),
       });
 
+      const savedReview = await this.reviewRepository.save(newReview);
+
       guide.starsTotalSum += stars;
-
-      const reviews = guide.reviews;
-      if (!reviews) {
-        guide.reviews = [];
-      }
-
-      guide.reviews.push(newReview);
-
       await this.guideRepository.save(guide);
-      return await this.reviewRepository.save(newReview);
+
+      return savedReview;
     } catch (error) {
-      if (error.message.includes(ERROR_MESSAGES.DUPLICATE_KEY)) {
+      if (error.message.includes(ERROR_MESSAGES.UNIQUE_CONSTRAINT_VIOLATION)) {
         throw new BadRequestException('user have already reviewed this guide');
       }
       throw new Error(error);

@@ -7,5 +7,5 @@ export const SUCCESS_MESSAGES = {
 export const ERROR_MESSAGES = {
   USER_NOT_FOUND: 'User not found',
   USER_ALREADY_EXISTS: 'User already exists',
-  DUPLICATE_KEY: 'duplicate key value violates unique constraint',
+  UNIQUE_CONSTRAINT_VIOLATION: 'duplicate key value violates unique constraint',
 };

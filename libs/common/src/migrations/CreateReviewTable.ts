@@ -3,10 +3,9 @@ import {
   QueryRunner,
   Table,
   TableForeignKey,
-  TableUnique,
 } from 'typeorm';
 
-export class CreateReviewTable1623712816567 implements MigrationInterface {
+export class CreateReviewTable1623712816569 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -20,12 +19,12 @@ export class CreateReviewTable1623712816567 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
-            name: 'userId',
+            name: 'guideId',
             type: 'int',
             isNullable: false,
           },
           {
-            name: 'guideId',
+            name: 'userId',
             type: 'int',
             isNullable: false,
           },
@@ -49,27 +48,6 @@ export class CreateReviewTable1623712816567 implements MigrationInterface {
       true,
     );
 
-    // Add a unique constraint on userId and guideId combination
-    await queryRunner.createUniqueConstraint(
-      'Review',
-      new TableUnique({
-        name: 'UQ_userId_guideId',
-        columnNames: ['userId', 'guideId'],
-      }),
-    );
-
-    // Create foreign key for the userId column
-    await queryRunner.createForeignKey(
-      'Review',
-      new TableForeignKey({
-        columnNames: ['userId'],
-        referencedColumnNames: ['userId'],
-        referencedTableName: 'User',
-        onDelete: 'CASCADE',
-      }),
-    );
-
-    // Create foreign key for the guideId column
     await queryRunner.createForeignKey(
       'Review',
       new TableForeignKey({
@@ -79,14 +57,21 @@ export class CreateReviewTable1623712816567 implements MigrationInterface {
         onDelete: 'CASCADE',
       }),
     );
+
+    await queryRunner.createForeignKey(
+      'Review',
+      new TableForeignKey({
+        columnNames: ['userId'],
+        referencedColumnNames: ['userId'],
+        referencedTableName: 'User',
+        onDelete: 'CASCADE',
+      }),
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropUniqueConstraint('Review', 'UQ_userId_guideId');
-
-    await queryRunner.dropForeignKey('Review', 'FK_Review_userId');
-    await queryRunner.dropForeignKey('Review', 'FK_Review_guideId');
-
+    await queryRunner.dropForeignKey('Review', 'FK_Review_Guide');
+    await queryRunner.dropForeignKey('Review', 'FK_Review_User');
     await queryRunner.dropTable('Review');
   }
 }
