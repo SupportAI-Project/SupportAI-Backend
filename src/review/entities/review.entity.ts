@@ -43,7 +43,7 @@ export class Review {
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @ManyToOne(() => Guide, (guide) => guide.reviews)
+  @ManyToOne(() => Guide, (guide) => guide.reviews, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'guideId' })
   guide: Guide;
 }

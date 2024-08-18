@@ -35,7 +35,10 @@ export class Guide {
   @IsDate()
   createdAt: Date;
 
-  @OneToMany(() => Review, (review) => review.guide)
+  @OneToMany(() => Review, (review) => review.guide, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   reviews: Review[];
 
   @ManyToOne(() => User, { createForeignKeyConstraints: false })

@@ -5,8 +5,9 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export class CreateGuideTable1623712816566 implements MigrationInterface {
+export class CreateGuideTable1623712816567 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    // Create the Guide table
     await queryRunner.createTable(
       new Table({
         name: 'Guide',
@@ -36,18 +37,20 @@ export class CreateGuideTable1623712816566 implements MigrationInterface {
           {
             name: 'starsTotalSum',
             type: 'int',
+            isNullable: false,
             default: 0,
           },
           {
             name: 'createdAt',
             type: 'timestamp',
-            default: 'now()',
+            isNullable: false,
           },
         ],
       }),
       true,
     );
 
+    // Create the foreign key constraint for creatorId
     await queryRunner.createForeignKey(
       'Guide',
       new TableForeignKey({
@@ -60,7 +63,10 @@ export class CreateGuideTable1623712816566 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('Guide', 'FK_3a2c4d7f8f3e5f3b1b0a2f5b3b1');
+    // Drop the foreign key first
+    await queryRunner.dropForeignKey('Guide', 'FK_guide_creatorId_userId');
+
+    // Drop the Guide table
     await queryRunner.dropTable('Guide');
   }
 }

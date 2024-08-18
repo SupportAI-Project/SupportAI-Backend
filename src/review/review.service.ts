@@ -25,6 +25,10 @@ export class ReviewService {
       createdAt: new Date(),
     });
     guide.starsTotalSum += stars;
+    const reviews = guide.reviews;
+    if (!reviews) {
+      guide.reviews = [];
+    }
     guide.reviews.push(newReview);
     await this.guideRepository.save(guide);
     return await this.reviewRepository.save(newReview);
