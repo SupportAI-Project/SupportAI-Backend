@@ -4,9 +4,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '@app/common';
+import { Review } from 'src/review/entities/review.entity';
 
 @Entity('Guide')
 export class Guide {
@@ -25,9 +27,16 @@ export class Guide {
   @IsNumber()
   creatorId: number;
 
+  @Column({ default: 0 })
+  @IsNumber()
+  starsTotalSum: number;
+
   @Column()
   @IsDate()
   createdAt: Date;
+
+  @OneToMany(() => Review, (review) => review.guide)
+  reviews: Review[];
 
   @ManyToOne(() => User, { createForeignKeyConstraints: false })
   @JoinColumn({ name: 'creatorId' })
