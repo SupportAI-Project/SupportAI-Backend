@@ -20,6 +20,7 @@ import {
   ApiBody,
   ApiParam,
 } from '@nestjs/swagger';
+import { CurrentUser } from '@app/common';
 
 @ApiTags('chats')
 @Controller('chats')
@@ -38,8 +39,11 @@ export class ChatController {
     description: 'Invalid input data',
   })
   @ApiBody({ type: CreateChatDto })
-  async createChat(@Body() createChatDto: CreateChatDto) {
-    return await this.chatService.createChat(createChatDto);
+  async createChat(
+    @Body() createChatDto: CreateChatDto,
+    @CurrentUser() { userId }: User,
+  ) {
+    return await this.chatService.createChat(createChatDto, userId);
   }
 
   @Get()
