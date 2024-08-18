@@ -46,16 +46,16 @@ export class ReviewService {
     }
   }
 
-  findAll() {
-    return `This action returns all review`;
+  async findAll(guideId: number) {
+    return this.reviewRepository.find({ where: { guideId } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} review`;
+  async findOne(id: number) {
+    return this.reviewRepository.findOne({ where: { reviewId: id } });
   }
 
-  update(id: number, updateReviewDto: UpdateReviewDto) {
-    return `This action updates a #${id} review`;
+  async update(id: number, updateReviewDto: UpdateReviewDto) {
+    return await this.reviewRepository.update(id, updateReviewDto);
   }
 
   remove(id: number) {

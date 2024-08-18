@@ -45,12 +45,12 @@ export class ReviewController {
     return this.reviewService.create(createReviewDto, userId);
   }
 
-  @Get()
+  @Get('guide/:guideId')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Get all reviews' })
+  @ApiOperation({ summary: 'Get all reviews of a guide by guide id' })
   @ApiResponse({ status: HttpStatus.OK, description: 'List of all reviews' })
-  async findAll() {
-    return this.reviewService.findAll();
+  async findAll(@Param('guideId') guideId: string) {
+    return this.reviewService.findAll(+guideId);
   }
 
   @Get(':id')
