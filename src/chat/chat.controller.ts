@@ -20,7 +20,7 @@ import {
   ApiBody,
   ApiParam,
 } from '@nestjs/swagger';
-import { CurrentUser } from '@app/common';
+import { CurrentUser, User } from '@app/common';
 
 @ApiTags('chats')
 @Controller('chats')
