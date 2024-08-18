@@ -1,10 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Review } from './entities/review.entity';
 import { Repository } from 'typeorm';
 import { Guide } from 'src/guide/entities/guide.entity';
+import { ERROR_MESSAGES } from '@app/common';
 
 @Injectable()
 export class ReviewService {
@@ -14,24 +19,36 @@ export class ReviewService {
   ) {}
 
   async create(createReviewDto: CreateReviewDto, userId: number) {
-    const { guideId, stars } = createReviewDto;
-    const guide = await this.guideRepository.findOne({ where: { guideId } });
-    if (!guide) {
-      throw new BadRequestException(`Guide with ID ${guideId} not found`);
+    try {
+      const { guideId, stars } = createReviewDto;
+      const guide = await this.guideRepository.findOne({ where: { guideId } });
+      if (!guide) {
+        throw new BadRequestException(`Guide with ID ${guideId} not found`);
+      }
+
+      const newReview = await this.reviewRepository.create({
+        ...createReviewDto,
+        userId,
+        createdAt: new Date(),
+      });
+
+      guide.starsTotalSum += stars;
+
+      const reviews = guide.reviews;
+      if (!reviews) {
+        guide.reviews = [];
+      }
+
+      guide.reviews.push(newReview);
+
+      await this.guideRepository.save(guide);
+      return await this.reviewRepository.save(newReview);
+    } catch (error) {
+      if (error.message.includes(ERROR_MESSAGES.DUPLICATE_KEY)) {
+        throw new BadRequestException('user have already reviewed this guide');
+      }
+      throw new Error(error);
     }
-    const newReview = await this.reviewRepository.create({
-      ...createReviewDto,
-      userId,
-      createdAt: new Date(),
-    });
-    guide.starsTotalSum += stars;
-    const reviews = guide.reviews;
-    if (!reviews) {
-      guide.reviews = [];
-    }
-    guide.reviews.push(newReview);
-    await this.guideRepository.save(guide);
-    return await this.reviewRepository.save(newReview);
   }
 
   findAll() {
