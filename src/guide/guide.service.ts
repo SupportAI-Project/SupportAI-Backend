@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateGuideDto } from './dto/create-guide.dto';
 import { UpdateGuideDto } from './dto/update-guide.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -25,11 +25,10 @@ export class GuideService {
   }
 
   async getGuide(guideId: number) {
-    const guide = await this.guideRepository.findOne({ where: { guideId } });
-    if (!guide) {
-      throw new NotFoundException(`Guide with ID ${guideId} not found`);
-    }
-    return guide;
+    return await this.guideRepository.findOne({
+      where: { guideId },
+      relations: ['creator', 'reviews'],
+    });
   }
 
   async update(id: number, updateGuideDto: UpdateGuideDto) {
