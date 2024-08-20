@@ -14,7 +14,6 @@ import {
 } from 'class-validator';
 import { Role } from '../types';
 import { Chat } from '../../../../src/chat/entities/chat.entity';
-import { Exclude } from 'class-transformer';
 
 @Entity('User')
 export class User extends BaseEntity {
