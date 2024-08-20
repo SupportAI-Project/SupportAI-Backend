@@ -21,7 +21,9 @@ export class GuideService {
   }
 
   async getAllGuides() {
-    return await this.guideRepository.find();
+    return await this.guideRepository.find({
+      relations: ['creator', 'reviews'],
+    });
   }
 
   async getGuide(guideId: number) {
