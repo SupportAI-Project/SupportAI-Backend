@@ -7,7 +7,6 @@ import {
 
 export class CreateGuideTable1623712816567 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Create the Guide table
     await queryRunner.createTable(
       new Table({
         name: 'Guide',
@@ -35,12 +34,6 @@ export class CreateGuideTable1623712816567 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'starsTotalSum',
-            type: 'int',
-            isNullable: false,
-            default: 0,
-          },
-          {
             name: 'createdAt',
             type: 'timestamp',
             isNullable: false,
@@ -50,7 +43,6 @@ export class CreateGuideTable1623712816567 implements MigrationInterface {
       true,
     );
 
-    // Create the foreign key constraint for creatorId
     await queryRunner.createForeignKey(
       'Guide',
       new TableForeignKey({
@@ -63,10 +55,8 @@ export class CreateGuideTable1623712816567 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // Drop the foreign key first
     await queryRunner.dropForeignKey('Guide', 'FK_guide_creatorId_userId');
 
-    // Drop the Guide table
     await queryRunner.dropTable('Guide');
   }
 }

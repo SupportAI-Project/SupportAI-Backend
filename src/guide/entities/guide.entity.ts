@@ -27,10 +27,6 @@ export class Guide {
   @IsNumber()
   creatorId: number;
 
-  @Column({ default: 0 })
-  @IsNumber()
-  starsTotalSum: number;
-
   @Column()
   @IsDate()
   createdAt: Date;

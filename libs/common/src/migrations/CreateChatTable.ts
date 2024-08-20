@@ -7,12 +7,10 @@ import {
 
 export class CreateChatTable1723712816563 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Drop the foreign key constraint if it exists
     await queryRunner.query(
       `ALTER TABLE "Chat" DROP CONSTRAINT IF EXISTS "FK_3a2c4d7f8f3e5f3b1b0a2f5b3b1";`,
     );
 
-    // Create the Chat table
     await queryRunner.createTable(
       new Table({
         name: 'Chat',

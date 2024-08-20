@@ -16,7 +16,7 @@ export class ReviewService {
 
   async create(createReviewDto: CreateReviewDto, userId: number) {
     try {
-      const { guideId, stars } = createReviewDto;
+      const { guideId } = createReviewDto;
       const guide = await this.guideRepository.findOne({ where: { guideId } });
       if (!guide) {
         throw new BadRequestException(`Guide with ID ${guideId} not found`);
@@ -30,7 +30,6 @@ export class ReviewService {
 
       const savedReview = await this.reviewRepository.save(newReview);
 
-      guide.starsTotalSum += stars;
       await this.guideRepository.save(guide);
 
       return savedReview;
