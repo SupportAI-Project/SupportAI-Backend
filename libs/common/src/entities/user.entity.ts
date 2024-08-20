@@ -30,7 +30,7 @@ export class User extends BaseEntity {
   @IsString()
   email: string;
 
-  @Column()
+  @Column({ select: false })
   @IsStrongPassword()
   password: string;
 
