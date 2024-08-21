@@ -36,6 +36,7 @@ export class ChatGateway {
       customerId: userId,
     });
     client.emit('chatCreated', chat);
+    this.server.emit('chatCreated', chat);
   }
 
   @SubscribeMessage('message')
