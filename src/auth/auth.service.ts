@@ -14,7 +14,7 @@ import { User } from '@app/common';
 import { Response } from 'express';
 import { TokenPayload } from '@app/common';
 import { ConfigService } from '@nestjs/config';
-import { Role } from '@app/common';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -39,10 +39,7 @@ export class AuthService {
     return { access_token: jwtToken };
   }
 
-  async register(
-    createUserDto: CreateUserDto,
-    roles: Role[] = [Role.USER],
-  ): Promise<User> {
+  async register(createUserDto: CreateUserDto): Promise<User> {
     const isUserExist = await this.userService.validateCreateUserDto(
       createUserDto.username,
       createUserDto.email,
@@ -53,9 +50,7 @@ export class AuthService {
       );
     }
 
-    const userWithRole: CreateUserDto = { ...createUserDto, roles };
-
-    const newUser = await this.userService.createUser(userWithRole);
+    const newUser = await this.userService.createUser(createUserDto);
     if (!newUser) {
       Logger.error('Error creating user');
       throw new HttpException(
@@ -82,6 +77,8 @@ export class AuthService {
   async extractUserFromToken(token: string): Promise<User> {
     try {
       const decodedToken = this.jwtService.decode(token) as TokenPayload;
+      console.log('decodedToken', decodedToken);
+
       const user = await this.userService.getUser(decodedToken.username);
       return user;
     } catch (error) {
