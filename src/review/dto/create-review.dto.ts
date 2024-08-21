@@ -25,7 +25,7 @@ export class CreateReviewDto {
     description: 'Rating given by the user (1-5 stars)',
     example: 5,
   })
-  stars: number;
+  rating: number;
 
   @IsOptional()
   @IsString()

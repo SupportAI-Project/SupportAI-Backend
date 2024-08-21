@@ -29,7 +29,7 @@ export class Review {
   @IsInt()
   @Min(1, { message: 'Rating must be at least 1 star' })
   @Max(5, { message: 'Rating must be at most 5 stars' })
-  stars: number;
+  rating: number;
 
   @Column({ type: 'text', nullable: true })
   @IsString()
