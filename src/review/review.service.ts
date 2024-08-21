@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Review } from './entities/review.entity';
 import { Repository } from 'typeorm';
 import { Guide } from 'src/guide/entities/guide.entity';
-import { ERROR_MESSAGES } from '@app/common';
 
 @Injectable()
 export class ReviewService {
@@ -34,7 +33,9 @@ export class ReviewService {
 
       return savedReview;
     } catch (error) {
-      if (error.message.includes(ERROR_MESSAGES.UNIQUE_CONSTRAINT_VIOLATION)) {
+      if (
+        error.message.includes('duplicate key value violates unique constraint')
+      ) {
         throw new BadRequestException('user have already reviewed this guide');
       }
       throw new Error(error);
