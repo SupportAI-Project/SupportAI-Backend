@@ -12,7 +12,7 @@ import {
 @Entity('Message')
 export class Message {
   @PrimaryGeneratedColumn()
-  messageId: number;
+  id: number;
 
   @Column()
   @IsBoolean()
