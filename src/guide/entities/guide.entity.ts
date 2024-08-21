@@ -13,7 +13,7 @@ import { Review } from 'src/review/entities/review.entity';
 @Entity('Guide')
 export class Guide {
   @PrimaryGeneratedColumn()
-  guideId: number;
+  id: number;
 
   @Column()
   @IsString()
@@ -26,7 +26,6 @@ export class Guide {
   @Column()
   @IsNumber()
   creatorId: number;
-
   @Column()
   @IsDate()
   createdAt: Date;

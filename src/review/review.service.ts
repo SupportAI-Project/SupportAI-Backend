@@ -16,7 +16,9 @@ export class ReviewService {
   async create(createReviewDto: CreateReviewDto, userId: number) {
     try {
       const { guideId } = createReviewDto;
-      const guide = await this.guideRepository.findOne({ where: { guideId } });
+      const guide = await this.guideRepository.findOne({
+        where: { id: guideId },
+      });
       if (!guide) {
         throw new BadRequestException(`Guide with ID ${guideId} not found`);
       }

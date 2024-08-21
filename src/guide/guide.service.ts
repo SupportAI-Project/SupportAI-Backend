@@ -28,7 +28,7 @@ export class GuideService {
 
   async getGuide(guideId: number) {
     return await this.guideRepository.findOne({
-      where: { guideId },
+      where: { id: guideId },
       relations: ['creator', 'reviews'],
     });
   }
