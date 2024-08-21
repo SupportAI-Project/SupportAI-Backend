@@ -56,7 +56,7 @@ export class CreateMessageTable1723712816564 implements MigrationInterface {
       'Message',
       new TableForeignKey({
         columnNames: ['chatId'],
-        referencedColumnNames: ['chatId'],
+        referencedColumnNames: ['id'],
         referencedTableName: 'Chat',
         onDelete: 'CASCADE',
       }),

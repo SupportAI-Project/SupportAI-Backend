@@ -47,7 +47,7 @@ export class CreateGuideTable1623712816567 implements MigrationInterface {
       'Guide',
       new TableForeignKey({
         columnNames: ['creatorId'],
-        referencedColumnNames: ['userId'],
+        referencedColumnNames: ['id'],
         referencedTableName: 'User',
         onDelete: 'CASCADE',
       }),

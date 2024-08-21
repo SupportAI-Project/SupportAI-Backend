@@ -51,7 +51,7 @@ export class CreateChatTable1723712816563 implements MigrationInterface {
       'Chat',
       new TableForeignKey({
         columnNames: ['customerId'],
-        referencedColumnNames: ['userId'],
+        referencedColumnNames: ['id'],
         referencedTableName: 'User',
         onDelete: 'CASCADE',
       }),

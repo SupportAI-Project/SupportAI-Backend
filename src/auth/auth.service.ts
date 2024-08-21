@@ -6,7 +6,6 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { UserService } from './user/user.service';
-import { SUCCESS_MESSAGES } from '@app/common';
 import { USER_ERROR_MESSAGES } from '@app/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './user/dto/create-user.dto';
@@ -67,29 +66,13 @@ export class AuthService {
   }
 
   async logout(response: Response) {
-    try {
-      response.clearCookie('Authorization');
-      response.status(HttpStatus.OK).send(SUCCESS_MESSAGES.USER_LOGGED_OUT);
-    } catch (error) {
-      Logger.error('Error logging out: ', error);
-      throw new HttpException(
-        USER_ERROR_MESSAGES.LOGOUT_FAILED,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    response.clearCookie('Authorization');
+    response.status(HttpStatus.OK).send('Logged out successfully');
   }
 
   async extractUserFromToken(token: string): Promise<User> {
-    try {
-      const decodedToken = this.jwtService.decode(token) as TokenPayload;
-      const user = await this.userService.getUser(decodedToken.username);
-      return user;
-    } catch (error) {
-      Logger.error('Error decoding token', error);
-      throw new HttpException(
-        error.message || USER_ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
-        error.status || HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const decodedToken = this.jwtService.decode(token) as TokenPayload;
+    const user = await this.userService.getUser(decodedToken.username);
+    return user;
   }
 }

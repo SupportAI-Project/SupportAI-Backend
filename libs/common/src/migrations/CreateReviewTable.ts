@@ -52,7 +52,7 @@ export class CreateReviewTable1623712816569 implements MigrationInterface {
       'Review',
       new TableForeignKey({
         columnNames: ['guideId'],
-        referencedColumnNames: ['guideId'],
+        referencedColumnNames: ['id'],
         referencedTableName: 'Guide',
         onDelete: 'CASCADE',
       }),
@@ -62,7 +62,7 @@ export class CreateReviewTable1623712816569 implements MigrationInterface {
       'Review',
       new TableForeignKey({
         columnNames: ['userId'],
-        referencedColumnNames: ['userId'],
+        referencedColumnNames: ['id'],
         referencedTableName: 'User',
         onDelete: 'CASCADE',
       }),
