@@ -32,7 +32,7 @@ export class Message {
   @IsString()
   content: string;
 
-  @Column({ name: 'chatId' })
+  @Column()
   chatId: number;
 
   @ManyToOne(() => Chat, (chat) => chat.messages, { onDelete: 'CASCADE' })

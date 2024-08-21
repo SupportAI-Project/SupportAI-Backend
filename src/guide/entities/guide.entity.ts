@@ -26,6 +26,7 @@ export class Guide {
   @Column()
   @IsNumber()
   creatorId: number;
+
   @Column()
   @IsDate()
   createdAt: Date;
