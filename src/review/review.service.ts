@@ -42,11 +42,17 @@ export class ReviewService {
   }
 
   async findAll(guideId: number) {
-    return this.reviewRepository.find({ where: { guideId } });
+    return this.reviewRepository.find({
+      where: { guideId },
+      relations: ['user'],
+    });
   }
 
   async findOne(id: number) {
-    return this.reviewRepository.findOne({ where: { reviewId: id } });
+    return this.reviewRepository.findOne({
+      where: { reviewId: id },
+      relations: ['user'],
+    });
   }
 
   async update(id: number, updateReviewDto: UpdateReviewDto) {
