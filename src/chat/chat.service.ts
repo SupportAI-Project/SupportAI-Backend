@@ -21,10 +21,11 @@ export class ChatService {
     private readonly messageService: MessageService,
   ) {}
 
-  async createChat(createChatDto: CreateChatDto) {
+  async createChat(createChatDto: CreateChatDto, userId: number) {
     try {
       const newChat = this.chatRepository.create({
         ...createChatDto,
+        customerId: userId,
         startTime: new Date(),
         endTime: null,
         isOpen: true,
