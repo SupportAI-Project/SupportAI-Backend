@@ -11,7 +11,7 @@ import { User } from '@app/common';
 @Entity('Chat')
 export class Chat {
   @PrimaryGeneratedColumn()
-  chatId: number;
+  id: number;
 
   @Column()
   @IsNumber()
