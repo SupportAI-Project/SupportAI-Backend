@@ -31,7 +31,14 @@ export class ChatService {
         messages: [],
       });
 
-      return await this.chatRepository.save(newChat);
+      await this.chatRepository.save(newChat);
+
+      const chatWithUser = await this.chatRepository.findOne({
+        where: { chatId: newChat.chatId },
+        relations: ['user'],
+      });
+
+      return chatWithUser;
     } catch (e) {
       Logger.error('Error creating chat', e);
       throw new InternalServerErrorException(
