@@ -84,7 +84,7 @@ export class UserService {
   async deleteUser(userId: number): Promise<boolean> {
     try {
       const user = await this.userRepository.findOne({
-        where: { userId: userId },
+        where: { id: userId },
       });
       if (!user) {
         throw new NotFoundException(USER_ERROR_MESSAGES.USER_NOT_FOUND);

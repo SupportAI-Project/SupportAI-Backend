@@ -23,7 +23,7 @@ export class GuideController {
   @ApiBody({ type: CreateGuideDto })
   async create(
     @Body() createGuideDto: CreateGuideDto,
-    @CurrentUser() { userId }: User,
+    @CurrentUser() { id: userId }: User,
   ) {
     return await this.guideService.create(createGuideDto, userId);
   }

@@ -26,7 +26,7 @@ export class ReviewController {
   @ApiBody({ type: CreateReviewDto })
   async create(
     @Body() createReviewDto: CreateReviewDto,
-    @CurrentUser() { userId }: User,
+    @CurrentUser() { id: userId }: User,
   ) {
     return this.reviewService.create(createReviewDto, userId);
   }

@@ -27,7 +27,7 @@ export class ChatController {
   @ApiBody({ type: CreateChatDto })
   async createChat(
     @Body() createChatDto: CreateChatDto,
-    @CurrentUser() { userId }: User,
+    @CurrentUser() { id: userId }: User,
   ) {
     return await this.chatService.createChat(createChatDto, userId);
   }

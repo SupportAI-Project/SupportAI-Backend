@@ -25,7 +25,7 @@ export class AuthService {
 
   async login(user: User): Promise<{ access_token: string }> {
     const tokenPayload: TokenPayload = {
-      sub: user.userId,
+      sub: user.id,
       username: user.username,
       roles: user.roles,
     };
