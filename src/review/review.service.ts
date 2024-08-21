@@ -60,7 +60,7 @@ export class ReviewService {
     return await this.reviewRepository.update(id, updateReviewDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} review`;
+  async remove(id: number) {
+    return await this.reviewRepository.delete(id);
   }
 }
