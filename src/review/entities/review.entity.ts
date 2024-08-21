@@ -15,7 +15,7 @@ import { Guide } from 'src/guide/entities/guide.entity';
 @Unique(['userId', 'guideId'])
 export class Review {
   @PrimaryGeneratedColumn()
-  reviewId: number;
+  id: number;
 
   @Column()
   @IsInt()

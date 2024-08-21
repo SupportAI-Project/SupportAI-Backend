@@ -51,7 +51,7 @@ export class ReviewService {
 
   async findOne(id: number) {
     return this.reviewRepository.findOne({
-      where: { reviewId: id },
+      where: { id: id },
       relations: ['user'],
     });
   }
