@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { THREE_DAYS, User } from '@app/common';
@@ -24,7 +16,6 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
-  @HttpCode(HttpStatus.OK)
   @Post('login')
   @Public()
   @ApiOperation({ summary: 'Log in a user' })
@@ -41,7 +32,6 @@ export class AuthController {
     return user;
   }
 
-  @HttpCode(HttpStatus.CREATED)
   @Post('register')
   @Public()
   @ApiOperation({ summary: 'Register a new user' })
@@ -51,7 +41,6 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @HttpCode(HttpStatus.OK)
   @Post('logout')
   @ApiOperation({ summary: 'Log out the current user' })
   async logout(@Res({ passthrough: true }) response: Response) {

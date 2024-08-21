@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
@@ -18,7 +10,6 @@ export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
   @Post()
-  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Upload a new message' })
   @ApiBody({ type: CreateMessageDto })
   async uploadMessage(@Body() message: CreateMessageDto) {
@@ -26,7 +17,6 @@ export class MessageController {
   }
 
   @Post(':id')
-  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Update a message by ID' })
   @ApiBody({ type: UpdateMessageDto })
   @ApiParam({ name: 'id', type: Number, description: 'Message ID' })
@@ -38,7 +28,6 @@ export class MessageController {
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Delete a message by ID' })
   @ApiParam({ name: 'id', type: Number, description: 'Message ID' })
   async deleteMessage(@Param('id') id: number) {
