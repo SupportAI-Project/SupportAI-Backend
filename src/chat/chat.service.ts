@@ -7,7 +7,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chat } from './entities/chat.entity';
 import { Repository } from 'typeorm';
-import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { CHAT_ERROR_MESSAGES } from '@app/common';
 import { Message } from './message/entities/message.entity';
@@ -21,10 +20,9 @@ export class ChatService {
     private readonly messageService: MessageService,
   ) {}
 
-  async createChat(createChatDto: CreateChatDto, userId: number) {
+  async createChat(userId: number) {
     try {
       const newChat = this.chatRepository.create({
-        ...createChatDto,
         customerId: userId,
         startTime: new Date(),
         endTime: null,

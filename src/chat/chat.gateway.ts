@@ -33,7 +33,7 @@ export class ChatGateway {
       Logger.error('No customerId provided ' + userId, 'ChatGateway');
     }
 
-    const chat = await this.chatService.createChat({}, userId);
+    const chat = await this.chatService.createChat(userId);
     client.emit('chatCreated', chat);
     this.server.emit('chatCreated', chat);
   }

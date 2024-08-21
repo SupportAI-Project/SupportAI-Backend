@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { Chat } from './entities/chat.entity';
-import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import {
   ApiTags,
@@ -38,12 +37,8 @@ export class ChatController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Invalid input data',
   })
-  @ApiBody({ type: CreateChatDto })
-  async createChat(
-    @Body() createChatDto: CreateChatDto,
-    @CurrentUser() { userId }: User,
-  ) {
-    return await this.chatService.createChat(createChatDto, userId);
+  async createChat(@CurrentUser() { userId }: User) {
+    return await this.chatService.createChat(userId);
   }
 
   @Get()
