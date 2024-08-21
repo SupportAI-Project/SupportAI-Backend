@@ -7,11 +7,7 @@ import { Review } from './entities/review.entity';
 import { GuideModule } from 'src/guide/guide.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Guide]),
-    TypeOrmModule.forFeature([Review]),
-    GuideModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Guide, Review]), GuideModule],
   controllers: [ReviewController],
   providers: [ReviewService],
 })
