@@ -12,7 +12,7 @@ export class CreateGuideTable1623712816567 implements MigrationInterface {
         name: 'Guide',
         columns: [
           {
-            name: 'guideId',
+            name: 'id',
             type: 'int',
             isPrimary: true,
             isGenerated: true,

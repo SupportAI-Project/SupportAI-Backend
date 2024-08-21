@@ -16,7 +16,7 @@ export class CreateMessageTable1723712816564 implements MigrationInterface {
         name: 'Message',
         columns: [
           {
-            name: 'messageId',
+            name: 'id',
             type: 'int',
             isPrimary: true,
             isGenerated: true,

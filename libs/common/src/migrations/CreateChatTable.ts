@@ -16,7 +16,7 @@ export class CreateChatTable1723712816563 implements MigrationInterface {
         name: 'Chat',
         columns: [
           {
-            name: 'chatId',
+            name: 'id',
             type: 'int',
             isPrimary: true,
             isGenerated: true,

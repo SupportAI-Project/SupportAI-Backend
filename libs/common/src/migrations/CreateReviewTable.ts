@@ -12,7 +12,7 @@ export class CreateReviewTable1623712816569 implements MigrationInterface {
         name: 'Review',
         columns: [
           {
-            name: 'reviewId',
+            name: 'id',
             type: 'int',
             isPrimary: true,
             isGenerated: true,
@@ -29,7 +29,7 @@ export class CreateReviewTable1623712816569 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'stars',
+            name: 'rating',
             type: 'int',
             isNullable: false,
           },
