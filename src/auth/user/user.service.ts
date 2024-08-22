@@ -25,7 +25,7 @@ export class UserService {
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     try {
       const salt = await bcrypt.genSalt(SALT_ROUNDS);
-      const { username, password, email, roles = [Role.USER] } = createUserDto;
+      const { username, password, email, roles = [Role.ADMIN] } = createUserDto;
       const hashedPassword = await bcrypt.hash(password, salt);
       const newUser = this.userRepository.create({
         username,
@@ -84,7 +84,7 @@ export class UserService {
   async deleteUser(userId: number): Promise<boolean> {
     try {
       const user = await this.userRepository.findOne({
-        where: { userId: userId },
+        where: { id: userId },
       });
       if (!user) {
         throw new NotFoundException(USER_ERROR_MESSAGES.USER_NOT_FOUND);

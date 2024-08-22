@@ -7,7 +7,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chat } from './entities/chat.entity';
 import { Repository } from 'typeorm';
-import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { CHAT_ERROR_MESSAGES } from '@app/common';
 import { Message } from './message/entities/message.entity';
@@ -21,10 +20,9 @@ export class ChatService {
     private readonly messageService: MessageService,
   ) {}
 
-  async createChat(createChatDto: CreateChatDto, userId: number) {
+  async createChat(userId: number) {
     try {
       const newChat = this.chatRepository.create({
-        ...createChatDto,
         customerId: userId,
         startTime: new Date(),
         endTime: null,
@@ -32,7 +30,14 @@ export class ChatService {
         messages: [],
       });
 
-      return await this.chatRepository.save(newChat);
+      await this.chatRepository.save(newChat);
+
+      const chatWithUser = await this.chatRepository.findOne({
+        where: { chatId: newChat.chatId },
+        relations: ['user'],
+      });
+
+      return chatWithUser;
     } catch (e) {
       Logger.error('Error creating chat', e);
       throw new InternalServerErrorException(
@@ -65,7 +70,7 @@ export class ChatService {
 
   async deleteChat(chatId: number) {
     try {
-      await this.chatRepository.delete({ chatId });
+      await this.chatRepository.delete({ id: chatId });
     } catch (e) {
       Logger.error('Error deleting chat', e);
       throw new InternalServerErrorException(
@@ -76,7 +81,7 @@ export class ChatService {
   async getChat(chatId: number): Promise<Chat> {
     try {
       const chat = await this.chatRepository.findOne({
-        where: { chatId },
+        where: { id: chatId },
         relations: ['messages'],
       });
       if (!chat) {

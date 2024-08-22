@@ -12,7 +12,7 @@ import {
 @Entity('Message')
 export class Message {
   @PrimaryGeneratedColumn()
-  messageId: number;
+  id: number;
 
   @Column()
   @IsBoolean()
@@ -32,7 +32,7 @@ export class Message {
   @IsString()
   content: string;
 
-  @Column({ name: 'chatId' })
+  @Column()
   chatId: number;
 
   @ManyToOne(() => Chat, (chat) => chat.messages, { onDelete: 'CASCADE' })

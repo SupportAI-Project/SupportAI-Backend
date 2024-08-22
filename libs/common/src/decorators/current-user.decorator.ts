@@ -3,7 +3,7 @@ import { User } from '../entities';
 
 const getCurrentUserByContext = (context: ExecutionContext): User => {
   const request = context.switchToHttp().getRequest();
-  return request.user;
+  return request.user as User;
 };
 
 export const CurrentUser = createParamDecorator(

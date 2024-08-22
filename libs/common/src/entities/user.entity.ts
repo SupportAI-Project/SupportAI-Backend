@@ -18,7 +18,7 @@ import { Chat } from '../../../../src/chat/entities/chat.entity';
 @Entity('User')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
-  userId: number;
+  id: number;
 
   @Column({ unique: true })
   @IsNotEmpty()
