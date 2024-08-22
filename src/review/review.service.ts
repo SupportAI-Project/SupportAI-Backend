@@ -4,25 +4,15 @@ import { UpdateReviewDto } from './dto/update-review.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Review } from './entities/review.entity';
 import { Repository } from 'typeorm';
-import { Guide } from 'src/guide/entities/guide.entity';
 
 @Injectable()
 export class ReviewService {
   constructor(
     @InjectRepository(Review) private reviewRepository: Repository<Review>,
-    @InjectRepository(Guide) private guideRepository: Repository<Guide>,
   ) {}
 
   async create(createReviewDto: CreateReviewDto, userId: number) {
     try {
-      const { guideId } = createReviewDto;
-      const guide = await this.guideRepository.findOne({
-        where: { id: guideId },
-      });
-      if (!guide) {
-        throw new BadRequestException(`Guide with ID ${guideId} not found`);
-      }
-
       const newReview = await this.reviewRepository.create({
         ...createReviewDto,
         userId,
@@ -30,8 +20,6 @@ export class ReviewService {
       });
 
       const savedReview = await this.reviewRepository.save(newReview);
-
-      await this.guideRepository.save(guide);
 
       return savedReview;
     } catch (error) {
@@ -44,9 +32,8 @@ export class ReviewService {
     }
   }
 
-  async findAll(guideId: number) {
+  async findAll() {
     return this.reviewRepository.find({
-      where: { guideId },
       relations: ['user'],
     });
   }

@@ -28,10 +28,10 @@ export class ReviewController {
     return this.reviewService.create(createReviewDto, userId);
   }
 
-  @Get('guide/:guideId')
-  @ApiOperation({ summary: 'Get all reviews of a guide by guide id' })
-  async findAll(@Param('guideId') guideId: string) {
-    return this.reviewService.findAll(+guideId);
+  @Get()
+  @ApiOperation({ summary: 'Get all reviews' })
+  async findAll() {
+    return this.reviewService.findAll();
   }
 
   @Get(':id')
