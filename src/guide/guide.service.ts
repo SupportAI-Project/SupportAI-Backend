@@ -22,14 +22,14 @@ export class GuideService {
 
   async getAllGuides() {
     return await this.guideRepository.find({
-      relations: ['creator', 'reviews'],
+      relations: ['creator', 'reviews', 'reviews.user'],
     });
   }
 
   async getGuide(guideId: number) {
     return await this.guideRepository.findOne({
       where: { id: guideId },
-      relations: ['creator', 'reviews'],
+      relations: ['creator', 'reviews', 'reviews.user'],
     });
   }
 
