@@ -70,7 +70,7 @@ export class ChatService {
 
   async deleteChat(chatId: number) {
     try {
-      await this.chatRepository.delete({ chatId });
+      await this.chatRepository.delete({ id: chatId });
     } catch (e) {
       Logger.error('Error deleting chat', e);
       throw new InternalServerErrorException(
@@ -81,7 +81,7 @@ export class ChatService {
   async getChat(chatId: number): Promise<Chat> {
     try {
       const chat = await this.chatRepository.findOne({
-        where: { chatId },
+        where: { id: chatId },
         relations: ['messages'],
       });
       if (!chat) {

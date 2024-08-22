@@ -5,19 +5,14 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export class CreateGuideTable1723712816566 implements MigrationInterface {
+export class CreateGuideTable1623712816567 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE "Guide" DROP CONSTRAINT IF EXISTS "FK_3a2c4d7f8f3e5f3b1b0a2f5b3b1";`,
-    );
-
-    // Create the Guide table
     await queryRunner.createTable(
       new Table({
         name: 'Guide',
         columns: [
           {
-            name: 'guideId',
+            name: 'id',
             type: 'int',
             isPrimary: true,
             isGenerated: true,
@@ -41,7 +36,7 @@ export class CreateGuideTable1723712816566 implements MigrationInterface {
           {
             name: 'createdAt',
             type: 'timestamp',
-            default: 'now()',
+            isNullable: false,
           },
         ],
       }),
@@ -52,7 +47,7 @@ export class CreateGuideTable1723712816566 implements MigrationInterface {
       'Guide',
       new TableForeignKey({
         columnNames: ['creatorId'],
-        referencedColumnNames: ['userId'],
+        referencedColumnNames: ['id'],
         referencedTableName: 'User',
         onDelete: 'CASCADE',
       }),
@@ -60,7 +55,8 @@ export class CreateGuideTable1723712816566 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('Guide', 'FK_3a2c4d7f8f3e5f3b1b0a2f5b3b1');
+    await queryRunner.dropForeignKey('Guide', 'FK_guide_creatorId_userId');
+
     await queryRunner.dropTable('Guide');
   }
 }

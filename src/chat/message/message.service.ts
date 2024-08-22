@@ -49,7 +49,7 @@ export class MessageService {
 
   async deleteMessage(messageId: number) {
     try {
-      await this.messageRepository.delete({ messageId: messageId });
+      await this.messageRepository.delete({ id: messageId });
     } catch (e) {
       Logger.error('Error deleting message', e);
       throw new InternalServerErrorException(

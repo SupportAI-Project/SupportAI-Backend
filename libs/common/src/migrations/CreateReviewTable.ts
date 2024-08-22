@@ -5,15 +5,11 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export class CreateChatTable1723712816563 implements MigrationInterface {
+export class CreateReviewTable1623712816569 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE "Chat" DROP CONSTRAINT IF EXISTS "FK_3a2c4d7f8f3e5f3b1b0a2f5b3b1";`,
-    );
-
     await queryRunner.createTable(
       new Table({
-        name: 'Chat',
+        name: 'Review',
         columns: [
           {
             name: 'id',
@@ -23,24 +19,29 @@ export class CreateChatTable1723712816563 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
-            name: 'customerId',
+            name: 'guideId',
             type: 'int',
             isNullable: false,
           },
           {
-            name: 'startTime',
-            type: 'timestamp',
+            name: 'userId',
+            type: 'int',
             isNullable: false,
           },
           {
-            name: 'endTime',
-            type: 'timestamp',
+            name: 'rating',
+            type: 'int',
+            isNullable: false,
+          },
+          {
+            name: 'comment',
+            type: 'text',
             isNullable: true,
           },
           {
-            name: 'isOpen',
-            type: 'boolean',
-            default: true,
+            name: 'createdAt',
+            type: 'timestamp',
+            default: 'now()',
           },
         ],
       }),
@@ -48,9 +49,19 @@ export class CreateChatTable1723712816563 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
-      'Chat',
+      'Review',
       new TableForeignKey({
-        columnNames: ['customerId'],
+        columnNames: ['guideId'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'Guide',
+        onDelete: 'CASCADE',
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      'Review',
+      new TableForeignKey({
+        columnNames: ['userId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'User',
         onDelete: 'CASCADE',
@@ -59,7 +70,8 @@ export class CreateChatTable1723712816563 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('Chat', 'FK_3a2c4d7f8f3e5f3b1b0a2f5b3b1');
-    await queryRunner.dropTable('Chat');
+    await queryRunner.dropForeignKey('Review', 'FK_Review_Guide');
+    await queryRunner.dropForeignKey('Review', 'FK_Review_User');
+    await queryRunner.dropTable('Review');
   }
 }
