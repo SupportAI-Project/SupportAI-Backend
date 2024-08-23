@@ -2,6 +2,7 @@ import { IsBoolean, IsDate, IsNumber } from 'class-validator';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -32,5 +33,6 @@ export class Chat {
   messages: Message[];
 
   @ManyToOne(() => User, (user) => user.chats)
+  @JoinColumn({ name: 'customerId' })
   user: User;
 }

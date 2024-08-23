@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Chat } from './entities/chat.entity';
 import { Repository } from 'typeorm';
 import { UpdateChatDto } from './dto/update-chat.dto';
-import { CHAT_ERROR_MESSAGES } from '@app/common';
+import { CHAT_ERROR_MESSAGES, User } from '@app/common';
 import { Message } from './message/entities/message.entity';
 import { MessageService } from './message/message.service';
 import { CreateMessageDto } from './message/dto/create-message.dto';
@@ -15,7 +15,7 @@ export class ChatService {
     private readonly messageService: MessageService,
   ) {}
 
-  async createChat(user) {
+  async createChat(user: User) {
     const newChat = this.chatRepository.create({
       customerId: user.id,
       startTime: new Date(),
@@ -53,7 +53,7 @@ export class ChatService {
   async getChat(chatId: number): Promise<Chat> {
     const chat = await this.chatRepository.findOne({
       where: { id: chatId },
-      relations: ['messages'],
+      relations: ['messages', 'user'],
     });
     if (!chat) {
       throw new NotFoundException(CHAT_ERROR_MESSAGES.CHAT_NOT_FOUND);

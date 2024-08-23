@@ -9,7 +9,7 @@ import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { Logger, UseGuards } from '@nestjs/common';
 import { SendMessageDto } from './message/dto/send-message.dto';
-import { WsAuthGuard } from '@app/common';
+import { User, WsAuthGuard } from '@app/common';
 import { AuthService } from 'src/auth/auth.service';
 import { ChatRoomActionDto } from './message/dto/join-chat.dto';
 
@@ -27,13 +27,12 @@ export class ChatGateway {
   @SubscribeMessage('create')
   async handleCreateChat(@ConnectedSocket() client: Socket) {
     const auth_token = client.handshake.headers.authorization;
-    const { id: userId } =
-      await this.authService.extractUserFromToken(auth_token);
-    if (!userId) {
-      Logger.error('No customerId provided ' + userId, 'ChatGateway');
+    const user: User = await this.authService.extractUserFromToken(auth_token);
+    if (!user) {
+      Logger.error('No user provided ' + user, 'ChatGateway');
     }
 
-    const chat = await this.chatService.createChat(userId);
+    const chat = await this.chatService.createChat(user);
     client.emit('chatCreated', chat);
     this.server.emit('chatCreated', chat);
   }
