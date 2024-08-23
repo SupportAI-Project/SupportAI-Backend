@@ -20,12 +20,9 @@ export class ChatController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new chat' })
-  @ApiBody({ type: CreateChatDto })
-  async createChat(
-    @Body() createChatDto: CreateChatDto,
-    @CurrentUser() { id: userId }: User,
-  ) {
-    return await this.chatService.createChat(createChatDto, userId);
+  async createChat(@CurrentUser() user: User) {
+    console.log(user);
+    return await this.chatService.createChat(user);
   }
 
   @Get()

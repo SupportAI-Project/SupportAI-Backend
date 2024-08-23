@@ -1,14 +1,9 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chat } from './entities/chat.entity';
 import { Repository } from 'typeorm';
 import { UpdateChatDto } from './dto/update-chat.dto';
-import { CHAT_ERROR_MESSAGES } from '@app/common';
+import { CHAT_ERROR_MESSAGES, User } from '@app/common';
 import { Message } from './message/entities/message.entity';
 import { MessageService } from './message/message.service';
 import { CreateMessageDto } from './message/dto/create-message.dto';
@@ -20,30 +15,20 @@ export class ChatService {
     private readonly messageService: MessageService,
   ) {}
 
-  async createChat(userId: number) {
-    try {
-      const newChat = this.chatRepository.create({
-        customerId: userId,
-        startTime: new Date(),
-        endTime: null,
-        isOpen: true,
-        messages: [],
-      });
+  async createChat(user: User) {
+    const newChat = this.chatRepository.create({
+      customerId: user.id,
+      startTime: new Date(),
+      endTime: null,
+      isOpen: true,
+      messages: [],
+    });
 
-      await this.chatRepository.save(newChat);
+    await this.chatRepository.save(newChat);
 
-      const chatWithUser = await this.chatRepository.findOne({
-        where: { chatId: newChat.chatId },
-        relations: ['user'],
-      });
+    const chatWithUser = { ...newChat, user: user };
 
-      return chatWithUser;
-    } catch (e) {
-      Logger.error('Error creating chat', e);
-      throw new InternalServerErrorException(
-        CHAT_ERROR_MESSAGES.CREATE_CHAT_ERROR,
-      );
-    }
+    return chatWithUser;
   }
 
   async sendMessage(createMessageDto: CreateMessageDto): Promise<Message> {
@@ -58,57 +43,27 @@ export class ChatService {
   }
 
   async updateChat(chat_id: number, chat: UpdateChatDto) {
-    try {
-      await this.chatRepository.update(chat_id, chat);
-    } catch (e) {
-      Logger.error('Error updating chat', e);
-      throw new InternalServerErrorException(
-        CHAT_ERROR_MESSAGES.UPDATE_CHAT_ERROR,
-      );
-    }
+    await this.chatRepository.update(chat_id, chat);
   }
 
   async deleteChat(chatId: number) {
-    try {
-      await this.chatRepository.delete({ id: chatId });
-    } catch (e) {
-      Logger.error('Error deleting chat', e);
-      throw new InternalServerErrorException(
-        CHAT_ERROR_MESSAGES.DELETE_CHAT_ERROR,
-      );
-    }
+    await this.chatRepository.delete({ id: chatId });
   }
+
   async getChat(chatId: number): Promise<Chat> {
-    try {
-      const chat = await this.chatRepository.findOne({
-        where: { id: chatId },
-        relations: ['messages'],
-      });
-      if (!chat) {
-        throw new NotFoundException(CHAT_ERROR_MESSAGES.CHAT_NOT_FOUND);
-      }
-      return chat;
-    } catch (e) {
-      Logger.error('Error getting chat', e);
-      if (e instanceof NotFoundException) {
-        throw e;
-      }
-      throw new InternalServerErrorException(
-        CHAT_ERROR_MESSAGES.GET_CHAT_ERROR,
-      );
+    const chat = await this.chatRepository.findOne({
+      where: { id: chatId },
+      relations: ['messages', 'user'],
+    });
+    if (!chat) {
+      throw new NotFoundException(CHAT_ERROR_MESSAGES.CHAT_NOT_FOUND);
     }
+    return chat;
   }
 
   async getAllChats(): Promise<Chat[]> {
-    try {
-      return await this.chatRepository.find({
-        relations: ['user'],
-      });
-    } catch (e) {
-      Logger.error('Error getting all chats', e);
-      throw new InternalServerErrorException(
-        CHAT_ERROR_MESSAGES.GET_CHATS_ERROR,
-      );
-    }
+    return await this.chatRepository.find({
+      relations: ['user'],
+    });
   }
 }
