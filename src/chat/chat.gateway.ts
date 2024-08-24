@@ -26,7 +26,7 @@ export class ChatGateway {
 
   @SubscribeMessage('create')
   async handleCreateChat(@ConnectedSocket() client: Socket) {
-    const auth_token = client.handshake.headers.authorization;
+    const auth_token = client.handshake.headers.cookie.split('=')[1];
     const user: User = await this.authService.extractUserFromToken(auth_token);
     if (!user) {
       Logger.error('No user provided ' + user, 'ChatGateway');

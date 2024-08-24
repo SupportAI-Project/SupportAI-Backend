@@ -27,7 +27,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
   app.useWebSocketAdapter(new IoAdapter(app));
   app.enableCors({
-    origin: config.FRONTEND_URL,
+    origin: [config.FRONTEND_URL, config.MODEL_AI_URL],
     credentials: true,
   });
 
