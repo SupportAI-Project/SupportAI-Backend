@@ -1,4 +1,4 @@
-enum Issue {
+export enum Issue {
     ACCOUNT_ACCESS_ISSUES = 'Account Access Issues',
     PAYMENT_PROCESSING_ERRORS = 'Payment Processing Errors',
     SYSTEM_PERFORMANCE_OR_SLOWDOWN = 'System Performance or Slowdown',
