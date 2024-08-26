@@ -27,6 +27,14 @@ export class CreateReviewDto {
   })
   rating: number;
 
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    description: 'Title of the review',
+    example: 'Very helpful guide!',
+  })
+  title: string
+
   @IsOptional()
   @IsString()
   @ApiProperty({
