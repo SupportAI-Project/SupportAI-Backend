@@ -39,7 +39,7 @@ export class CreateUserDto {
   @IsArray()
   @ApiProperty({
     description: 'Array of roles assigned to the user',
-    example: ['admin', 'user'],
+    example: ['user', 'assistant', 'system', 'function'],
     required: false,
   })
   roles?: Role[];
