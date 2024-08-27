@@ -25,10 +25,13 @@ export class GuideService {
       });
     }
 
-    if (!issueEntity.categories.includes(createGuideDto.issue)) {
-      issueEntity.categories.push(createGuideDto.issue);
-      await this.issueRepository.save(issueEntity);
+    for (const tag of createGuideDto.tags) {
+      if (!issueEntity.categories.includes(tag)) {
+        issueEntity.categories.push(tag);
+      }
     }
+
+    await this.issueRepository.save(issueEntity);
 
     const newGuide = await this.guideRepository.create({
       ...createGuideDto,
