@@ -1,5 +1,4 @@
-import { Injectable, NotFoundException, InternalServerErrorException, Logger } from '@nestjs/common';
-import { CreateIssueDto } from './dto/create-issue.dto';
+import { Injectable } from '@nestjs/common';
 import { UpdateIssueDto } from './dto/update-issue.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,39 +11,26 @@ export class IssueService {
     private issueRepository: Repository<Issue>,
   ) {}
 
-  async createIssue(createIssueDto: CreateIssueDto): Promise<Issue> {
-    const newIssue = this.issueRepository.create({
-      ...createIssueDto,
+  async getOrCreateIssue(): Promise<Issue> {
+    let issue = await this.issueRepository.findOne({
+      where: { singletonKey: 1 },
     });
-    return await this.issueRepository.save(newIssue);
-  };
-
-  async getAllIssues(): Promise<Issue[]> {
-    return await this.issueRepository.find();
-  };
-
-  async getIssue(id: number): Promise<Issue> {
-    const issue = await this.issueRepository.findOne({ where: { id } });
-    if(!issue) {
-      Logger.error(`Issue with ID ${id} not found`);
+    if (!issue) {
+      issue = this.issueRepository.create({ categories: [], singletonKey: 1 });
+      await this.issueRepository.save(issue);
     }
     return issue;
-  };
-
-  async updateIssue(id: number, updateIssueDto: UpdateIssueDto): Promise<Issue> {
-    await this.issueRepository.update(id, updateIssueDto);
-    const updatedIssue = await this.issueRepository.findOne({ where: { id } });
-    if (!updatedIssue) {
-      Logger.error(`Issue with ID ${id} not found`);
-    };
-    return updatedIssue;
   }
 
-  async deleteIssue(id: number): Promise<boolean> {
-    const result = await this.issueRepository.delete(id);
-    if(result.affected === 0){
-      return false;
-    }
+  async updateIssue(updateIssueDto: UpdateIssueDto): Promise<Issue> {
+    const issue = await this.getOrCreateIssue();
+    Object.assign(issue, updateIssueDto);
+    return await this.issueRepository.save(issue);
+  }
+
+  async deleteIssue(): Promise<boolean> {
+    const issue = await this.getOrCreateIssue();
+    await this.issueRepository.remove(issue);
     return true;
   }
 }

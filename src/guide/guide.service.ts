@@ -4,19 +4,38 @@ import { UpdateGuideDto } from './dto/update-guide.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Guide } from './entities/guide.entity';
+import { Issue } from '../issue/entities/issue.entity';
 
 @Injectable()
 export class GuideService {
   constructor(
     @InjectRepository(Guide) private guideRepository: Repository<Guide>,
+    @InjectRepository(Issue) private issueRepository: Repository<Issue>,
   ) {}
 
   async create(createGuideDto: CreateGuideDto, userId: number) {
+    let issueEntity = await this.issueRepository.findOne({
+      where: { singletonKey: 1 },
+    });
+
+    if (!issueEntity) {
+      issueEntity = this.issueRepository.create({
+        categories: [],
+        singletonKey: 1,
+      });
+    }
+
+    if (!issueEntity.categories.includes(createGuideDto.issue)) {
+      issueEntity.categories.push(createGuideDto.issue);
+      await this.issueRepository.save(issueEntity);
+    }
+
     const newGuide = await this.guideRepository.create({
       ...createGuideDto,
       createdAt: new Date(),
       creatorId: userId,
     });
+
     return await this.guideRepository.save(newGuide);
   }
 

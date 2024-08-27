@@ -13,6 +13,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { HttpExceptionFilter } from '@app/common';
 import { GuideModule } from 'src/guide/guide.module';
 import { ReviewModule } from 'src/review/review.module';
+import { IssueModule } from 'src/issue/issue.module';
 
 @Module({
   imports: [
@@ -70,6 +71,7 @@ import { ReviewModule } from 'src/review/review.module';
     MessageModule,
     GuideModule,
     ReviewModule,
+    IssueModule,
   ],
   controllers: [AppController],
   providers: [
