@@ -1,4 +1,10 @@
-import { IsDate, IsNumber, IsString } from 'class-validator';
+import {
+  IsDate,
+  IsNumber,
+  IsString,
+  IsArray,
+  ArrayMaxSize,
+} from 'class-validator';
 import {
   Column,
   Entity,
@@ -23,9 +29,11 @@ export class Guide {
   @IsString()
   contentHTML: string;
 
-  @Column()
-  @IsString()
-  issue: string;
+  @Column('simple-array')
+  @IsArray()
+  @ArrayMaxSize(3)
+  @IsString({ each: true })
+  tags: string[];
 
   @Column()
   @IsNumber()
