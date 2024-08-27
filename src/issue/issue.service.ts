@@ -11,7 +11,6 @@ export class IssueService {
     private issueRepository: Repository<Issue>,
   ) {}
 
-  // Fetch the single issue instance, create one if it doesn't exist
   async getOrCreateIssue(): Promise<Issue> {
     let issue = await this.issueRepository.findOne({
       where: { singletonKey: 1 },
@@ -23,14 +22,12 @@ export class IssueService {
     return issue;
   }
 
-  // Update the existing issue (there is only one)
   async updateIssue(updateIssueDto: UpdateIssueDto): Promise<Issue> {
     const issue = await this.getOrCreateIssue();
     Object.assign(issue, updateIssueDto);
     return await this.issueRepository.save(issue);
   }
 
-  // This method is not needed since there's only one issue instance
   async deleteIssue(): Promise<boolean> {
     const issue = await this.getOrCreateIssue();
     await this.issueRepository.remove(issue);
