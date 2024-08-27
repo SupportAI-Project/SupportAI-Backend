@@ -1,11 +1,8 @@
 import { IsArray, IsNumber, IsString } from 'class-validator';
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity('Issue')
+@Unique(['singletonKey'])
 export class Issue {
   @PrimaryGeneratedColumn()
   @IsNumber()
@@ -15,4 +12,7 @@ export class Issue {
   @IsArray()
   @IsString({ each: true })
   categories: string[];
+
+  @Column({ default: 1 })
+  singletonKey: number;
 }
