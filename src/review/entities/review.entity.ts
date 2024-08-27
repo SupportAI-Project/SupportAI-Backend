@@ -1,4 +1,4 @@
-import { IsInt, IsString, IsOptional, Min, Max } from 'class-validator';
+import { IsInt, IsString, IsOptional, Min, Max, isString } from 'class-validator';
 import {
   Column,
   Entity,
@@ -30,6 +30,10 @@ export class Review {
   @Min(1, { message: 'Rating must be at least 1 star' })
   @Max(5, { message: 'Rating must be at most 5 stars' })
   rating: number;
+
+  @Column({ type: 'text'})
+  @IsString()
+  title: string;
 
   @Column({ type: 'text', nullable: true })
   @IsString()
