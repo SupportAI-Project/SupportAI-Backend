@@ -24,6 +24,10 @@ export class Guide {
   contentHTML: string;
 
   @Column()
+  @IsString()
+  issue: string;
+
+  @Column()
   @IsNumber()
   creatorId: number;
 

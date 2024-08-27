@@ -15,4 +15,11 @@ export class CreateGuideDto {
     example: '<p>This is a guide on how to use Swagger with NestJS.</p>',
   })
   contentHTML: string;
+
+  @IsString()
+  @ApiProperty({
+    description: 'Issue that the guide is about',
+    example: 'Swagger',
+  })
+  issue: string;
 }
