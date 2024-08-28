@@ -23,5 +23,5 @@ export class CreateGuideDto {
     description: 'up to 3 tags to categorize the guide',
     example: ['NestJS', 'Swagger', 'API'],
   })
-  tags: string[];
+  categories: string[];
 }

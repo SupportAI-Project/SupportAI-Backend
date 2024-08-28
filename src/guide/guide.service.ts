@@ -25,9 +25,9 @@ export class GuideService {
       });
     }
 
-    for (const tag of createGuideDto.tags) {
-      if (!issueEntity.categories.includes(tag)) {
-        issueEntity.categories.push(tag);
+    for (const category of createGuideDto.categories) {
+      if (!issueEntity.categories.includes(category)) {
+        issueEntity.categories.push(category);
       }
     }
 

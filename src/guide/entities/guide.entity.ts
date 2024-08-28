@@ -33,7 +33,7 @@ export class Guide {
   @IsArray()
   @ArrayMaxSize(3)
   @IsString({ each: true })
-  tags: string[];
+  categories: string[];
 
   @Column()
   @IsNumber()
