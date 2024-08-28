@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { ArrayMaxSize, IsArray, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateGuideDto {
@@ -16,10 +16,12 @@ export class CreateGuideDto {
   })
   contentHTML: string;
 
-  @IsString()
+  @IsArray()
+  @ArrayMaxSize(3)
+  @IsString({ each: true })
   @ApiProperty({
-    description: 'Issue that the guide is about',
-    example: 'Swagger',
+    description: 'up to 3 tags to categorize the guide',
+    example: ['NestJS', 'Swagger', 'API'],
   })
-  issue: string;
+  categories: string[];
 }
