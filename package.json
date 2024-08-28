@@ -19,8 +19,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "create:migration": "typeorm migration:create -n",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "typeorm": "typeorm-ts-node-commonjs",
+    "migration:generate": "npm run typeorm -- migration:generate -d ./src/database/data-source.ts src/database/migrations/%npm_config_name%",
+    "migration:run": "npm run typeorm -- migration:run -d ./src/database/data-source.ts",
+    "migration:revert": "npm run typeorm -- migration:revert -d ./src/database/data-source.ts",
+    "migration:create": "npm run typeorm -- migration:create -d ./src/database/data-source.ts",
+    "check-circular-deps": "npx madge --circular --extensions ts ./"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -73,6 +77,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
     "jest": "^29.5.0",
+    "madge": "^8.0.0",
     "prettier": "^3.0.0",
     "source-map-support": "^0.5.21",
     "supertest": "^6.3.3",
@@ -81,7 +86,7 @@
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typeorm": "^0.3.20",
-    "typescript": "^4.7.4",
+    "typescript": "^5.5.4",
     "zod": "^3.23.8"
   },
   "jest": {
