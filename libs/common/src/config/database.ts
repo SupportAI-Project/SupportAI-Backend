@@ -7,7 +7,7 @@ const envVarsSchema = z.object({
   POSTGRES_PASSWORD: z.string(),
   POSTGRES_DATABASE: z.string(),
   SYNCHRONIZE: z.string(),
-  SSL: z.string().optional().default('false'),
+  SSL: z.string().default('true'),
 });
 
 export const databaseConfig: () => TypeOrmModuleOptions = () => {
@@ -29,7 +29,7 @@ export const databaseConfig: () => TypeOrmModuleOptions = () => {
     username: POSTGRES_USER,
     password: POSTGRES_PASSWORD,
     database: POSTGRES_DATABASE,
-    ssl: SSL,
+    ssl: SSL ? { rejectUnauthorized: false } : false,
     autoLoadEntities: true,
     synchronize: SYNCHRONIZE,
   };
