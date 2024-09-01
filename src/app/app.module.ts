@@ -3,25 +3,26 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { databaseConfig, JwtAuthGuard, RolesGuard } from '@app/common';
+import { JwtAuthGuard, RolesGuard } from '@app/common';
+import { ChatModule } from 'src/chat/chat.module';
 import { UserModule } from 'src/auth/user/user.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-import { ChatModule } from 'src/chat/chat.module';
 import { MessageModule } from 'src/chat/message/message.module';
 import { LoggerModule } from 'nestjs-pino';
 import { HttpExceptionFilter } from '@app/common';
 import { GuideModule } from 'src/guide/guide.module';
 import { ReviewModule } from 'src/review/review.module';
 import { IssueModule } from 'src/issue/issue.module';
+import { configDataSource } from 'src/database/data-source';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRoot(databaseConfig()),
+    TypeOrmModule.forRoot(configDataSource),
     LoggerModule.forRoot({
       pinoHttp: {
-        customLogLevel: (res, err) => {
+        customLogLevel: (res) => {
           if (res && res.statusCode >= 500) return 'error';
           if (res && res.statusCode >= 400) return 'warn';
           return 'info';
@@ -65,9 +66,9 @@ import { IssueModule } from 'src/issue/issue.module';
         },
       },
     }),
+    ChatModule,
     UserModule,
     AuthModule,
-    ChatModule,
     MessageModule,
     GuideModule,
     ReviewModule,

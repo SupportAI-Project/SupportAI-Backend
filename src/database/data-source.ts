@@ -23,4 +23,5 @@ export const configDataSource: DataSourceOptions = {
 };
 
 const dataSource: DataSource = new DataSource(configDataSource);
+dataSource.initialize();
 export default dataSource;
