@@ -8,8 +8,8 @@ import {
   CreateDateColumn,
   Unique,
 } from 'typeorm';
-import { User } from '@app/common';
-import { Guide } from 'src/guide/entities/guide.entity';
+import { User } from '../../../libs/common/src/entities/user.entity';
+import { Guide } from '../../guide/entities/guide.entity';
 
 @Entity('Review')
 @Unique(['userId', 'guideId'])
