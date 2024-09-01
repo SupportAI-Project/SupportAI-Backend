@@ -13,7 +13,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { Role } from '../types';
-import { Chat } from '../../../../src/chat/entities/chat.entity';
+import type { Chat } from '../../../../src/chat/entities/chat.entity';
 
 @Entity('User')
 export class User extends BaseEntity {
@@ -39,6 +39,6 @@ export class User extends BaseEntity {
   @IsOptional()
   roles?: Role[];
 
-  @OneToMany(() => Chat, (chat) => chat.user)
+  @OneToMany('Chat', (chat: Chat) => chat.user)
   chats: Chat[];
 }

@@ -23,7 +23,7 @@
     "migration:generate": "npm run typeorm -- migration:generate -d ./src/database/data-source.ts src/database/migrations/%npm_config_name%",
     "migration:run": "npm run typeorm -- migration:run -d ./src/database/data-source.ts",
     "migration:revert": "npm run typeorm -- migration:revert -d ./src/database/data-source.ts",
-    "migration:create": "npm run typeorm -- migration:create -d ./src/database/data-source.ts",
+    "migration:create": "npm run typeorm -- migration:create ./src/database/migrations/%npm_config_name%",
     "check-circular-deps": "npx madge --circular --extensions ts ./"
   },
   "dependencies": {

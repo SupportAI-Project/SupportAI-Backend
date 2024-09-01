@@ -13,8 +13,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '@app/common';
-import { Review } from 'src/review/entities/review.entity';
+import { User } from '../../../libs/common/src/entities/user.entity';
+import { Review } from '../../review/entities/review.entity';
 
 @Entity('Guide')
 export class Guide {

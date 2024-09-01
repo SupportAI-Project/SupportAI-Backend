@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Message } from '../message/entities/message.entity';
-import { User } from '@app/common';
+import type { User } from '../../../libs/common/src/entities/user.entity';
 @Entity('Chat')
 export class Chat {
   @PrimaryGeneratedColumn()
@@ -32,7 +32,7 @@ export class Chat {
   @OneToMany(() => Message, (message) => message.chat)
   messages: Message[];
 
-  @ManyToOne(() => User, (user) => user.chats)
+  @ManyToOne('User', (user: User) => user.chats)
   @JoinColumn({ name: 'customerId' })
   user: User;
 }
